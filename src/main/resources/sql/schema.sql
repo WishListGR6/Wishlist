@@ -3,11 +3,12 @@ CREATE DATABASE IF NOT exists WishDB
 
 USE WishDB;
 
-drop table if exists wishlist;
+drop table if exists event_wish;
 drop table if exists access_token;
 drop table if exists event;
 drop table if exists wish;
-drop table if exists event_wish;
+drop table if exists wishlist;
+
 
 create table if not exists wishlist(
     listID varchar(8) primary key,
@@ -18,19 +19,22 @@ create table if not exists wishlist(
 
 create table if not exists access_token (
     token varchar(8) primary key,
-    listID varchar(8) foreign key references wishlist (listID) on delete cascade,
+    listID varchar(8) not null,
+    foreign key(listID) references wishlist (listID) on delete cascade
 );
 
 create table if not exists event (
     eventID int auto_increment primary key,
-    listID varchar(8) foreign key references wishlist (listID) on delete cascade,
+    listID varchar(8) not null,
+    foreign key(listID) references wishlist (listID) on delete cascade,
     event_name varchar(8),
     event_date date not null
 );
 
 create table if not exists wish (
     wishID int auto_increment primary key,
-    listID varchar(8) foreign key references wishlist (listID) on delete cascade,
+    listID varchar(8) not null,
+    foreign key(listID) references wishlist (listID) on delete cascade,
     wish_name varchar(100) not null,
     description varchar(1000),
     product_url varchar(1000),
