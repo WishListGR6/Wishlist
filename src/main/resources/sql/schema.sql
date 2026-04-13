@@ -39,6 +39,7 @@ create table if not exists wish (
     description varchar(1000),
     product_url varchar(1000),
     comments varchar(1000),
+    price double,
     image mediumblob
 );
 
