@@ -18,9 +18,9 @@ insert into wishlist(listID, list_name, ownerPW, guestPW) values
 insert into access_token(token, listID) values
     ('access12', 'abcd1234');
 
-insert into wish(listID, wish_name, description, product_url, comments, price) values
+insert into wish(listID, wish_name, description, product_url, comments, price, isReserved) values
     ('abcd1234', 'Sample wish', 'description', 'URL',
-     'sample comments', 9.95);
+     'sample comments', 9.95, false);
 
 insert into event(listID, event_name, event_date) values
     ('abcd1234', 'Sample event', str_to_date('24-12-2026', '%d-%m-%Y'));

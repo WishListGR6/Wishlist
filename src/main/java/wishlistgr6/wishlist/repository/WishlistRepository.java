@@ -1,8 +1,12 @@
 package wishlistgr6.wishlist.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import wishlistgr6.wishlist.model.Wishlist;
 
+import java.sql.ResultSet;
+import java.util.List;
 import java.util.Random;
 
 @Repository
@@ -24,6 +28,24 @@ public class WishlistRepository {
                 .limit(targetStringLength)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
+    }
+
+    public List<String> getAccessTokens(String listID){
+        String sqlAccessToken =
+                "select access_token.token as token" +
+                "from wishlist join access_token " +
+                "on wishlist.listID = access_token.listID" +
+                "and wishlist.listID = ?";
+
+        RowMapper<String> rowMapper = ResultSet::getString;
+        return jdbcTemplate.query(sqlAccessToken, rowMapper);
+    }
+
+    public Wishlist getWishlist(String listID){
+        String sqlWishlist =
+                "";
+
+        return jdbcTemplate.query(sqlWishlist);
     }
 
 }

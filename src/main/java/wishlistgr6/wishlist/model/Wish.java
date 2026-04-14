@@ -11,15 +11,17 @@ public class Wish {
     private String comments;
     private double price;
     private List<Event> events = new ArrayList<>();
+    private boolean isReserved;
     private Image image;
 
-    public Wish(String name, String description, String productURL, String comments, double price, List<Event> events) {
+    public Wish(String name, String description, String productURL, String comments, double price, List<Event> events, boolean isReserved) {
         this.name = name;
         this.description = description;
         this.productURL = productURL;
         this.comments = comments;
         this.price = price;
         this.events = events;
+        this.isReserved = isReserved;
     }
 
     public String getName() {

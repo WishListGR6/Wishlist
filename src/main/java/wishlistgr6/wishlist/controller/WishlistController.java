@@ -29,7 +29,7 @@ public class WishlistController {
         if(service.getAccessTokens(listID).contains(accessToken) && accessToken != null){
             session.setAttribute("wishlist", service.getWishlist(listID));
             session.setAttribute("isOwner", false);
-            return "redirect:/wishlist";
+            return "wishlist";
         }
 
         model.addAttribute("listID", listID);
@@ -38,20 +38,20 @@ public class WishlistController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute String password, Model model, HttpSession session) {
-        if (service.checkOwnerPassword(listID, password)){
+        if (service.checkOwnerPassword(model.getAttribute("listID"), password)){
             session.setAttribute("isOwner", true);
-            session.setAttribute("wishlist", service.getWishlist(model.getAttribute("listID")));
+            session.setAttribute("wishlist", service.getWishlist((String) model.getAttribute("listID")));
             return "redirect:/wishlist";
         }
 
-        if (service.checkGuestPassword(ListID, password)){
+        if (service.checkGuestPassword(model.getAttribute("listID"), password)){
             session.setAttribute("isOwner", false);
-            session.setAttribute("wishlist", service.getWishlist(model.getAttribute("listID")));
+            session.setAttribute("wishlist", service.getWishlist((String) model.getAttribute("listID")));
             return "redirect:/wishlist";
         }
 
         model.addAttribute("invalidPassword", true);
-        return "redirect:/login/" + model.getAttribute("listID");
+        return "login/" + model.getAttribute("listID");
     }
 
 }
