@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import wishlistgr6.wishlist.model.Wishlist;
+import wishlistgr6.wishlist.repository.rowMappers.WishlistRowMapper;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -42,10 +43,24 @@ public class WishlistRepository {
     }
 
     public Wishlist getWishlist(String listID){
-        String sqlWishlist =
-                "";
+        String sqlWishlist = "select wishlist.listID as listID, " +
+                "wishlist.wish_name as list_name" +
+                "where wishlist.listID = ?";
 
-        return jdbcTemplate.query(sqlWishlist);
+        return jdbcTemplate.query(sqlWishlist, new WishlistRowMapper(), listID).getFirst();
+    }
+
+    public boolean checkOwnerPassword(String listID, String password){
+        String SQLPassword = "select ownerPW from wishlist where wishlist.listID = ?";
+
+        RowMapper<String> rowMapper = ResultSet::getString;
+        return jdbcTemplate.query(SQLPassword, rowMapper, listID).getFirst().equals(password);
+    }
+    public boolean checkGuestPassword(String listID, String password){
+        String SQLPassword = "select guestPW from wishlist where wishlist.listID = ?";
+
+        RowMapper<String> rowMapper = ResultSet::getString;
+        return jdbcTemplate.query(SQLPassword, rowMapper, listID).getFirst().equals(password);
     }
 
 }
