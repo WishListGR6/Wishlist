@@ -1,6 +1,8 @@
 package wishlistgr6.wishlist.model;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Wish {
     private String name;
@@ -8,14 +10,16 @@ public class Wish {
     private String productURL;
     private String comments;
     private double price;
+    private List<Event> events = new ArrayList<>();
     private Image image;
 
-    public Wish(String name, String description, String productURL, String comments, double price) {
+    public Wish(String name, String description, String productURL, String comments, double price, List<Event> events) {
         this.name = name;
         this.description = description;
         this.productURL = productURL;
         this.comments = comments;
         this.price = price;
+        this.events = events;
     }
 
     public String getName() {
@@ -65,6 +69,10 @@ public class Wish {
     public void setImage(Image image) {
         this.image = image;
     }
+
+    public List<Event> getEvents() {return events;}
+
+    public void setEvents(List<Event> events) {this.events = events;}
 }
 
 
