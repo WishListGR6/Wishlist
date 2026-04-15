@@ -7,6 +7,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@sql(scirpts = "classpath:h2init.sql", excecutionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "classpath:h2init.sql, excecutionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)")
 public class WishlistRepositoryTest {
 }

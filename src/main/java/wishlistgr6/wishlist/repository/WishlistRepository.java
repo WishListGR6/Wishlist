@@ -34,32 +34,35 @@ public class WishlistRepository {
     public List<String> getAccessTokens(String listID){
         String sqlAccessToken =
                 "select access_token.token as token" +
-                "from wishlist join access_token " +
+                " from wishlist join access_token " +
                 "on wishlist.listID = access_token.listID" +
-                "and wishlist.listID = ?";
+                " and wishlist.listID = ?";
 
-        RowMapper<String> rowMapper = ResultSet::getString;
+        RowMapper<String> rowMapper = (rs, rowNum) -> rs.getString("token"); // find the token
         return jdbcTemplate.query(sqlAccessToken, rowMapper, listID);
     }
 
     public Wishlist getWishlist(String listID){
-        String sqlWishlist = "select wishlist.listID as listID, " +
-                "wishlist.wish_name as list_name" +
-                "where wishlist.listID = ?";
+        String sqlWishlist = """
+                select wishlist.listID as listID,
+                wishlist.list_name as list_name
+                from wishlist
+                where wishlist.listID = ?
+                """;
 
-        return jdbcTemplate.query(sqlWishlist, new WishlistRowMapper(), listID).getFirst();
+        return jdbcTemplate.query(sqlWishlist, new WishlistRowMapper(jdbcTemplate), listID).getFirst();
     }
 
     public boolean checkOwnerPassword(String listID, String password){
         String SQLPassword = "select ownerPW from wishlist where wishlist.listID = ?";
 
-        RowMapper<String> rowMapper = ResultSet::getString;
+        RowMapper<String> rowMapper = (rs, rowNum) -> rs.getString("ownerPW");
         return jdbcTemplate.query(SQLPassword, rowMapper, listID).getFirst().equals(password);
     }
     public boolean checkGuestPassword(String listID, String password){
         String SQLPassword = "select guestPW from wishlist where wishlist.listID = ?";
 
-        RowMapper<String> rowMapper = ResultSet::getString;
+        RowMapper<String> rowMapper = (rs, rowNum) -> rs.getString("guestPW");
         return jdbcTemplate.query(SQLPassword, rowMapper, listID).getFirst().equals(password);
     }
 

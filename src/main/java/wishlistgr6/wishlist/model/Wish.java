@@ -14,15 +14,6 @@ public class Wish {
     private boolean isReserved;
     private Image image;
 
-    public Wish(String name, String description, String productURL, String comments, double price, List<Event> events, boolean isReserved) {
-        this.name = name;
-        this.description = description;
-        this.productURL = productURL;
-        this.comments = comments;
-        this.price = price;
-        this.events = events;
-        this.isReserved = isReserved;
-    }
     public Wish(String name, String description, String productURL, String comments, double price, boolean isReserved) {
         this.name = name;
         this.description = description;
@@ -32,6 +23,13 @@ public class Wish {
         this.isReserved = isReserved;
     }
 
+    public boolean isReserved() {
+        return isReserved;
+    }
+
+    public void setReserved(boolean reserved) {
+        isReserved = reserved;
+    }
 
     public String getName() {
         return name;

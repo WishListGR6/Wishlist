@@ -12,9 +12,9 @@ public class WishRowMapper implements RowMapper<Wish> {
     @Override
     public Wish mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         Wish foundWish = new Wish(
-                resultSet.getString("wish_name"),
+                resultSet.getString("name"),
                 resultSet.getString("description"),
-                resultSet.getString("product_url"),
+                resultSet.getString("url"),
                 resultSet.getString("comments"),
                 resultSet.getDouble("price"),
                 resultSet.getBoolean("isReserved")
