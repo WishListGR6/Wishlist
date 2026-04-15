@@ -4,39 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <title>Login page</title>
 </head>
 <body>
-<div class="container-sm">
-    <div class="card">
-        <h5 class="card-header">Wishlist</h5>
-        <div class="card-body">
-            <div class="container" style="display: flex">
-            <h5 class="card-title">Find ønskeliste</h5>
-                <div class="form-group">
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Indtast dit ønskeliste URL">
-                </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+    <a class="navbar-brand" href="#">Wishlist</a>
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Hjem</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+        </ul>
     </div>
     </div>
-
-        <div class="card">
-            <h5 class="card-header">Opret ønskeliste</h5>
-            <h5 class="card-title">Klik for at oprette et ønske</h5>
-            <form action="#" th:action="@{/reserve/{wish}(wish=${wishlist.createWish})}" th:object="${wishlist}" method="post">
-                <button type="submit" class="btn btn-primary">Opret ønske</button>
-            </form>
-        </div>
-
-
-
-
+</nav>
 </div>
 
-
-
-
-
+<div class="container-sm">
+    <div class="card">
+        <h5 class="card-header">Find din ønskeliste</h5>
+        <div class="card-body">
+            <form action="#" th:action="@{/login}" th:object="${loginForm}" method="post">
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="listID" th:field="*{loginURL}" aria-describedby="loginInput" placeholder="Indtast dit ønskeliste URL">
+                </div>
+                    <button type="submit" class="btn btn-primary">Søg</button>
+                </form>
+    </div>
+        </div>
+        <div class="card mt-3">
+            <h5 class="card-header">Klik for at oprette en ønskeliste</h5>
+            <div class="card-body">
+            <form action="#" th:action="@{/login/create}" method="post">
+                <button type="submit" class="btn btn-primary">Opret ønske</button>
+            </form>
+                </div>
+        </div>
+</div>
+</div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>   <title>Login page</title>
 </html>
