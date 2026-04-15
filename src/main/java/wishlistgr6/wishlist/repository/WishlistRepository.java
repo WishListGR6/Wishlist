@@ -64,10 +64,15 @@ public class WishlistRepository {
         return jdbcTemplate.query(SQLPassword, rowMapper, listID).getFirst().equals(password);
     }
 
-    public String addWish(Wish wish) {
+    public String addWish(Wish wish, String listID) {
         String sqlWish =
+                "insert into wish(listID, wish_name, description, product_url, comments, price, isReserved) " +
+                        "values(?, ?, ?, ?, ?, ?, false)";
+        String sqlEvent =
                 "";
-
-        return jdbcTemplate.query(sqlWish, rowMapper);
+        jdbcTemplate.update(sqlWish, listID, wish.getName(), wish.getDescription(), wish.getProductURL(),
+                wish.getComments(), wish.getPrice());
+        jdbcTemplate.update(sqlEvent);
+        return "Wish added";
     }
 }

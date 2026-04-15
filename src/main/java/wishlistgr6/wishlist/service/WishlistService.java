@@ -27,8 +27,8 @@ public class WishlistService {
     public boolean checkGuestPassword(String listID, String password){return repository.checkGuestPassword(listID, password);}
 
 
-    public String addWish(Wish wish) {
-        return repository.addWish(wish);
+    public String addWish(Wish wish, String listID) {
+        return repository.addWish(wish, listID);
     }
 
 }
