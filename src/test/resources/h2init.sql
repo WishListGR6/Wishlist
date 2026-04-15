@@ -22,7 +22,7 @@ create table if not exists event (
     eventID int auto_increment primary key,
     listID varchar(8) not null,
     foreign key(listID) references wishlist (listID) on delete cascade,
-    event_name varchar(8),
+    event_name varchar(100),
     event_date date not null
     );
 
@@ -35,6 +35,7 @@ create table if not exists wish (
     product_url varchar(1000),
     comments varchar(1000),
     price double,
+    isReserved boolean not null,
     image mediumblob
     );
 
@@ -52,12 +53,12 @@ insert into wishlist(listID, list_name, ownerPW, guestPW) values
 insert into access_token(token, listID) values
     ('access12', 'abcd1234');
 
-insert into wish(listID, wish_name, description, product_url, comments, price) values
+insert into wish(listID, wish_name, description, product_url, comments, price, isReserved) values
     ('abcd1234', 'Sample wish', 'description', 'URL',
-     'sample comments', 9.95);
+     'sample comments', 9.95, false);
 
 insert into event(listID, event_name, event_date) values
-    ('abcd1234', 'Sample event', str_to_date('24-12-2026', '%d-%m-%Y'));
+    ('abcd1234', 'Sample event', '2026-12-24');
 
 insert into event_wish(eventID, wishID)
 select e.eventID, w.wishID

@@ -44,10 +44,10 @@ public class WishlistRepository {
 
     public Wishlist getWishlist(String listID){
         String sqlWishlist = "select wishlist.listID as listID, " +
-                "wishlist.wish_name as list_name" +
-                "where wishlist.listID = ?";
+                "wishlist.list_name as list_name " +
+                "from wishlist where listID = ?";
 
-        return jdbcTemplate.query(sqlWishlist, new WishlistRowMapper(), listID).getFirst();
+        return jdbcTemplate.query(sqlWishlist, new WishlistRowMapper(jdbcTemplate), listID).getFirst();
     }
 
     public boolean checkOwnerPassword(String listID, String password){

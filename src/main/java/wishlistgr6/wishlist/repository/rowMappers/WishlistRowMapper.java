@@ -11,7 +11,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class WishlistRowMapper implements RowMapper<Wishlist> {
-    private final JdbcTemplate jdbcTemplate = new JdbcTemplate();
+    private final JdbcTemplate jdbcTemplate;
+
+    public WishlistRowMapper(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public Wishlist mapRow(ResultSet resultSet, int rowNum) throws SQLException {
@@ -27,7 +31,7 @@ public class WishlistRowMapper implements RowMapper<Wishlist> {
 
     private List<Wish> findWishes(String listID){
         String SQLWishes =
-                "select wish.wish_name as name, " +
+                "select wish.wish_name as wish_name, " +
                 "wish.description as description, " +
                 "wish.product_url as url, " +
                 "wish.comments as comments, " +
@@ -35,19 +39,20 @@ public class WishlistRowMapper implements RowMapper<Wishlist> {
                 "wish.isReserved as isReserved, " +
                 "event.event_name as event_name, " +
                 "event.event_date as event_date " +
-                "from event_wish join wish" +
-                "on wish.wishID = event_wish.wishID" +
-                "and wish.listID = ?" +
-                "join event" +
-                "on event.eventID = event_wish.eventID" +
-                "order by wish.wish_name asc";
+                "from event_wish join wish " +
+                "on wish.wishID = event_wish.wishID " +
+                "and wish.listID = ? " +
+                "join event " +
+                "on event.eventID = event_wish.eventID " +
+                "order by wish_name";
 
         return jdbcTemplate.query(SQLWishes, new WishRowMapper(), listID);
     }
 
     private List<Event> findEvents(String listID){
         String SQLEvents ="select event.event_name as event_name, " +
-                "event.event_date as event_date" +
+                "event.event_date as event_date " +
+                "from event " +
                 "where event.listID = ?";
 
         RowMapper<Event> eventRowMapper = (resultSet, rowNum) -> new Event(
