@@ -23,6 +23,15 @@ public class Wish {
         this.events = events;
         this.isReserved = isReserved;
     }
+    public Wish(String name, String description, String productURL, String comments, double price, boolean isReserved) {
+        this.name = name;
+        this.description = description;
+        this.productURL = productURL;
+        this.comments = comments;
+        this.price = price;
+        this.isReserved = isReserved;
+    }
+
 
     public Wish(){
     }
@@ -78,6 +87,8 @@ public class Wish {
     public List<Event> getEvents() {return events;}
 
     public void setEvents(List<Event> events) {this.events = events;}
+
+    public void addEvent(Event event) {events.add(event);}
 }
 
 

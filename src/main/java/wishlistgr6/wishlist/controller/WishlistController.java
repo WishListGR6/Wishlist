@@ -39,13 +39,13 @@ public class WishlistController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute String password, Model model, HttpSession session) {
-        if (service.checkOwnerPassword(model.getAttribute("listID"), password)){
+        if (service.checkOwnerPassword((String)model.getAttribute("listID"), password)){
             session.setAttribute("isOwner", true);
             session.setAttribute("wishlist", service.getWishlist((String) model.getAttribute("listID")));
             return "redirect:/wishlist";
         }
 
-        if (service.checkGuestPassword(model.getAttribute("listID"), password)){
+        if (service.checkGuestPassword((String)model.getAttribute("listID"), password)){
             session.setAttribute("isOwner", false);
             session.setAttribute("wishlist", service.getWishlist((String) model.getAttribute("listID")));
             return "redirect:/wishlist";
