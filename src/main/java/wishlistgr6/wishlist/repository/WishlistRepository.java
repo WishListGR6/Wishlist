@@ -39,7 +39,7 @@ public class WishlistRepository {
                 "and wishlist.listID = ?";
 
         RowMapper<String> rowMapper = ResultSet::getString;
-        return jdbcTemplate.query(sqlAccessToken, rowMapper);
+        return jdbcTemplate.query(sqlAccessToken, rowMapper, listID);
     }
 
     public Wishlist getWishlist(String listID){
