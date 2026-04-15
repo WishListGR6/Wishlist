@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.service.WishlistService;
 
@@ -54,4 +55,16 @@ public class WishlistController {
         return "login/" + model.getAttribute("listID");
     }
 
+    @GetMapping("/createWish")
+    public String createWish(Model model) {
+        Wish wish = new Wish();
+        model.addAttribute("wish", wish);
+        return "new-wish";
+    }
+
+    @PostMapping("/addWish")
+    public String addWish(@ModelAttribute Wish wish) {
+        service.addWish(wish);
+        return "redirect:/wishlist";
+    }
 }

@@ -24,6 +24,9 @@ public class Wish {
         this.isReserved = isReserved;
     }
 
+    public Wish(){
+    }
+
     public String getName() {
         return name;
     }

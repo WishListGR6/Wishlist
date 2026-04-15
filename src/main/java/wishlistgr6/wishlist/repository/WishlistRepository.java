@@ -3,6 +3,7 @@ package wishlistgr6.wishlist.repository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 
 import java.sql.ResultSet;
@@ -48,4 +49,10 @@ public class WishlistRepository {
         return jdbcTemplate.query(sqlWishlist);
     }
 
+    public String addWish(Wish wish) {
+        String sqlWish =
+                "";
+
+        return jdbcTemplate.query(sqlWish, rowMapper);
+    }
 }

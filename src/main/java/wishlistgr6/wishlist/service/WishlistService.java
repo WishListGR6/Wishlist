@@ -2,6 +2,7 @@ package wishlistgr6.wishlist.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.repository.WishlistRepository;
 
 import java.util.List;
@@ -20,4 +21,9 @@ public class WishlistService {
     public List<String> getWishlist(String listID){
         return repository.getWishlist(listID);
     }
+
+    public String addWish(Wish wish) {
+        return repository.addWish(wish);
+    }
+
 }
