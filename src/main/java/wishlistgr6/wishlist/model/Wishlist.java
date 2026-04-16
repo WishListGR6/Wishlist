@@ -2,6 +2,7 @@ package wishlistgr6.wishlist.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Wishlist {
     private String name;
@@ -37,5 +38,17 @@ public class Wishlist {
 
     public void setEvents(List<Event> events) {
         this.events = events;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Wishlist wishlist = (Wishlist) o;
+        return Objects.equals(getName(), wishlist.getName()) && Objects.equals(getWishes(), wishlist.getWishes()) && Objects.equals(getEvents(), wishlist.getEvents());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getWishes(), getEvents());
     }
 }

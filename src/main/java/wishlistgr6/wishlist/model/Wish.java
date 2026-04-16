@@ -3,6 +3,7 @@ package wishlistgr6.wishlist.model;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Wish {
     private String name;
@@ -14,6 +15,17 @@ public class Wish {
     private boolean isReserved;
     private Image image;
 
+    public Wish(String name, String description, String productURL, String comments, double price, List<Event> events, boolean isReserved) {
+        this.name = name;
+        this.description = description;
+        this.productURL = productURL;
+        this.comments = comments;
+        this.price = price;
+        this.events = events;
+        this.isReserved = isReserved;
+    }
+
+    public Wish(){};
     public Wish(String name, String description, String productURL, String comments, double price, boolean isReserved) {
         this.name = name;
         this.description = description;
@@ -23,13 +35,6 @@ public class Wish {
         this.isReserved = isReserved;
     }
 
-    public boolean isReserved() {
-        return isReserved;
-    }
-
-    public void setReserved(boolean reserved) {
-        isReserved = reserved;
-    }
 
     public String getName() {
         return name;
@@ -84,6 +89,26 @@ public class Wish {
     public void setEvents(List<Event> events) {this.events = events;}
 
     public void addEvent(Event event) {events.add(event);}
+
+    public boolean isReserved() {
+        return isReserved;
+    }
+
+    public void setReserved(boolean reserved) {
+        isReserved = reserved;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Wish wish = (Wish) o;
+        return Double.compare(getPrice(), wish.getPrice()) == 0 && isReserved() == wish.isReserved() && Objects.equals(getName(), wish.getName()) && Objects.equals(getDescription(), wish.getDescription()) && Objects.equals(getProductURL(), wish.getProductURL()) && Objects.equals(getComments(), wish.getComments()) && Objects.equals(getEvents(), wish.getEvents()) && Objects.equals(getImage(), wish.getImage());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getDescription(), getProductURL(), getComments(), getPrice(), getEvents(), isReserved(), getImage());
+    }
 }
 
 

@@ -13,7 +13,6 @@ import java.util.List;
 public class WishlistRowMapper implements RowMapper<Wishlist> {
     private final JdbcTemplate jdbcTemplate;
 
-
     public WishlistRowMapper(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -32,7 +31,7 @@ public class WishlistRowMapper implements RowMapper<Wishlist> {
 
     private List<Wish> findWishes(String listID){
         String SQLWishes = """
-                select wish.wish_name as name,
+                select wish.wish_name as wish_name,
                 wish.description as description,
                 wish.product_url as url,
                 wish.comments as comments,
@@ -45,7 +44,7 @@ public class WishlistRowMapper implements RowMapper<Wishlist> {
                 and wish.listID = ?
                 join event
                 on event.eventID = event_wish.eventID
-                order by wish.wish_name asc
+                order by wish.wish_name
                 """;
 
         return jdbcTemplate.query(SQLWishes, new WishRowMapper(), listID);

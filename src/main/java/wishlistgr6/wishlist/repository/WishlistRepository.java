@@ -1,12 +1,11 @@
 package wishlistgr6.wishlist.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.rowMappers.WishlistRowMapper;
 
-import java.sql.ResultSet;
 import java.util.List;
 import java.util.Random;
 
@@ -33,37 +32,31 @@ public class WishlistRepository {
 
     public List<String> getAccessTokens(String listID){
         String sqlAccessToken =
-                "select access_token.token as token" +
-                " from wishlist join access_token " +
-                "on wishlist.listID = access_token.listID" +
-                " and wishlist.listID = ?";
+                "select access_token.token as token " +
+                "from wishlist join access_token " +
+                "on wishlist.listID = access_token.listID " +
+                "and wishlist.listID = ?";
 
-        RowMapper<String> rowMapper = (rs, rowNum) -> rs.getString("token"); // find the token
-        return jdbcTemplate.query(sqlAccessToken, rowMapper, listID);
+        return jdbcTemplate.query(sqlAccessToken, new SingleColumnRowMapper<>(), listID);
     }
 
     public Wishlist getWishlist(String listID){
-        String sqlWishlist = """
-                select wishlist.listID as listID,
-                wishlist.list_name as list_name
-                from wishlist
-                where wishlist.listID = ?
-                """;
+        String sqlWishlist = "select wishlist.listID as listID, " +
+                "wishlist.list_name as list_name " +
+                "from wishlist where listID = ?";
 
         return jdbcTemplate.query(sqlWishlist, new WishlistRowMapper(jdbcTemplate), listID).getFirst();
     }
 
     public boolean checkOwnerPassword(String listID, String password){
-        String SQLPassword = "select ownerPW from wishlist where wishlist.listID = ?";
+        String SQLPassword = "select ownerPW from wishlist where listID = ?";
 
-        RowMapper<String> rowMapper = (rs, rowNum) -> rs.getString("ownerPW");
-        return jdbcTemplate.query(SQLPassword, rowMapper, listID).getFirst().equals(password);
+        return jdbcTemplate.query(SQLPassword, new SingleColumnRowMapper<>(), listID).getFirst().equals(password);
     }
     public boolean checkGuestPassword(String listID, String password){
         String SQLPassword = "select guestPW from wishlist where wishlist.listID = ?";
 
-        RowMapper<String> rowMapper = (rs, rowNum) -> rs.getString("guestPW");
-        return jdbcTemplate.query(SQLPassword, rowMapper, listID).getFirst().equals(password);
+        return jdbcTemplate.query(SQLPassword, new SingleColumnRowMapper<>(), listID).getFirst().equals(password);
     }
 
 }
