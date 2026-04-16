@@ -60,9 +60,7 @@ public class WishlistController implements Serializable {
     }
 
     @GetMapping("/wishlist")
-    public String wishlist(Model model, HttpSession session) {
-        wishlist = (Wishlist) session.getAttribute("wishlist");
-        model.addAttribute("wishlist", wishlist);
+    public String wishlist() {
         return "wishlist";
     }
 

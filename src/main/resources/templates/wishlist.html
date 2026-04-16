@@ -21,10 +21,10 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:if="${wishlist.wishes.isEmpty()}">
-        <td colspan="4">Ingen registrerede ønsker</td>
+    <tr th:if="${session.wishlist == null or session.wishlist.wishes.isEmpty()}">
+        <td colspan="6">Ingen registrerede ønsker</td>
     </tr>
-    <tr th:each="element: ${wishlist.wishes}">
+    <tr th:each="element: ${session.wishlist.wishes}">
     <td th:text="${element.name}"></td>
     <td th:text="${element.description}"></td>
     <td th:text="${element.productURL}"></td>
