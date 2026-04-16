@@ -28,7 +28,6 @@ public class WishRowMapper implements RowMapper<Wish> {
                     resultSet.getString("event_name"),
                     resultSet.getDate("event_date")));
         }while(resultSet.next() && wish.getName().equals(resultSet.getString("wish_name")));
-
         return wish;
     }
 
