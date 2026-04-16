@@ -33,7 +33,7 @@ public class WishlistRowMapper implements RowMapper<Wishlist> {
         String SQLWishes = """
                 select wish.wish_name as wish_name,
                 wish.description as description,
-                wish.product_url as url,
+                wish.product_url as product_url,
                 wish.comments as comments,
                 wish.price as price,
                 wish.isReserved as isReserved,

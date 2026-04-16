@@ -20,7 +20,7 @@ public class WishRowMapper implements ResultSetExtractor<List<Wish>> {
                 foundWish = new Wish(
                         resultSet.getString("wish_name"),
                         resultSet.getString("description"),
-                resultSet.getString("product_url"),
+                        resultSet.getString("product_url"),
                         resultSet.getString("comments"),
                         resultSet.getDouble("price"),
                         resultSet.getBoolean("isReserved")
