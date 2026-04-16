@@ -15,6 +15,7 @@ import wishlistgr6.wishlist.repository.WishlistRepository;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -55,6 +56,40 @@ public class WishlistRepositoryTest {
 
         assertNotNull(wishlist);
         assertEquals(testList, wishlist);
-        System.out.println(wishlist.getWishes());
     }
+
+    @Test
+    void getWishlistBadListID(){
+        assertThrows(NoSuchElementException.class, () -> {repository.getWishlist("errorList");});
+    }
+
+    @Test
+    void getAccessTokenValidListIDAndToken(){
+        assert(repository.getAccessTokens("abcd1234").contains("access12"));
+    }
+    @Test
+    void getAccessTokenValidListIDWrongToken(){
+        assert(!repository.getAccessTokens("abcd1234").contains("wrongToken"));
+    }
+    @Test
+    void getAccessTokenInvalidListID(){
+        assert(repository.getAccessTokens("errorList").isEmpty());
+    }
+    @Test
+    void correctOwnerPassword(){
+        assertTrue(repository.checkOwnerPassword("abcd1234", "o1234"));
+    }
+    @Test
+    void inCorrectOwnerPassword(){
+        assertFalse(repository.checkOwnerPassword("abcd1234", "Wrong password"));
+    }
+    @Test
+    void correctGuestPassword(){
+        assertTrue(repository.checkGuestPassword("abcd1234", "g1234"));
+    }
+    @Test
+    void inCorrectGuestPassword(){
+        assertFalse(repository.checkGuestPassword("abcd1234", "Wrong password"));
+    }
+
 }

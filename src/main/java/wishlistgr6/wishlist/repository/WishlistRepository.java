@@ -2,6 +2,7 @@ package wishlistgr6.wishlist.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.rowMappers.WishlistRowMapper;
@@ -33,13 +34,12 @@ public class WishlistRepository {
 
     public List<String> getAccessTokens(String listID){
         String sqlAccessToken =
-                "select access_token.token as token" +
+                "select access_token.token as token " +
                 "from wishlist join access_token " +
-                "on wishlist.listID = access_token.listID" +
+                "on wishlist.listID = access_token.listID " +
                 "and wishlist.listID = ?";
 
-        RowMapper<String> rowMapper = ResultSet::getString;
-        return jdbcTemplate.query(sqlAccessToken, rowMapper, listID);
+        return jdbcTemplate.query(sqlAccessToken, new SingleColumnRowMapper<>(), listID);
     }
 
     public Wishlist getWishlist(String listID){
@@ -51,16 +51,14 @@ public class WishlistRepository {
     }
 
     public boolean checkOwnerPassword(String listID, String password){
-        String SQLPassword = "select ownerPW from wishlist where wishlist.listID = ?";
+        String SQLPassword = "select ownerPW from wishlist where listID = ?";
 
-        RowMapper<String> rowMapper = ResultSet::getString;
-        return jdbcTemplate.query(SQLPassword, rowMapper, listID).getFirst().equals(password);
+        return jdbcTemplate.query(SQLPassword, new SingleColumnRowMapper<>(), listID).getFirst().equals(password);
     }
     public boolean checkGuestPassword(String listID, String password){
         String SQLPassword = "select guestPW from wishlist where wishlist.listID = ?";
 
-        RowMapper<String> rowMapper = ResultSet::getString;
-        return jdbcTemplate.query(SQLPassword, rowMapper, listID).getFirst().equals(password);
+        return jdbcTemplate.query(SQLPassword, new SingleColumnRowMapper<>(), listID).getFirst().equals(password);
     }
 
 }
