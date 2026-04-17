@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Controller
 @RequestMapping("/")
-public class WishlistController implements Serializable {
+public class WishlistController {
     private final WishlistService service;
     private Wishlist wishlist;
     private boolean isOwner;
