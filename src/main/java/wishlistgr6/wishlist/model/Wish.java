@@ -25,7 +25,8 @@ public class Wish {
         this.isReserved = isReserved;
     }
 
-    public Wish(){};
+    public Wish(){}
+
     public Wish(String name, String description, String productURL, String comments, double price, boolean isReserved) {
         this.name = name;
         this.description = description;
@@ -33,10 +34,6 @@ public class Wish {
         this.comments = comments;
         this.price = price;
         this.isReserved = isReserved;
-    }
-
-
-    public Wish(){
     }
 
     public String getName() {

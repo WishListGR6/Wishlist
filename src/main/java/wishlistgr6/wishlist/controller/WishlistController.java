@@ -58,12 +58,13 @@ public class WishlistController {
     @GetMapping("/createWish")
     public String createWish(Model model, HttpSession session) {
         Wish wish = new Wish();
+
         model.addAttribute("wish", wish);
         return "new-wish";
     }
 
     @PostMapping("/addWish")
-    public String addWish(@ModelAttribute Wish wish, String listID) {
+    public String addWish(@ModelAttribute Wish wish, String listID, HttpSession session) {
         service.addWish(wish, listID);
         return "redirect:/wishlist";
     }

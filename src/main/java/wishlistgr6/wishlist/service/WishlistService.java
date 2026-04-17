@@ -19,7 +19,7 @@ public class WishlistService {
         return repository.getAccessTokens(listID);
     }
 
-    public List<String> getWishlist(String listID){
+    public Wishlist getWishlist(String listID){
         return repository.getWishlist(listID);
     }
 
