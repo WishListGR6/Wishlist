@@ -3,10 +3,12 @@ package wishlistgr6.wishlist.repository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.rowMappers.WishlistRowMapper;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.Random;
@@ -68,11 +70,30 @@ public class WishlistRepository {
         String sqlWish =
                 "insert into wish(listID, wish_name, description, product_url, comments, price, isReserved) " +
                         "values(?, ?, ?, ?, ?, ?, false)";
-        String sqlEvent =
-                "";
+
+        String sqlEvent = String.format("insert into event_wish(eventID, wishID) " +
+                "select e.eventID, w.wishID " +
+                "from(select eventID from event " +
+                "where event_name = '%s') as e " +
+                "cross join(select wishID from wish " +
+                "where wish_name = '%s') as w", formatEvents(wish.getEvents()), wish.getName());
+
         jdbcTemplate.update(sqlWish, listID, wish.getName(), wish.getDescription(), wish.getProductURL(),
                 wish.getComments(), wish.getPrice());
         jdbcTemplate.update(sqlEvent);
         return "Wish added";
+    }
+
+    private String formatEvents(List<Event> events){
+        if(events.isEmpty()){
+            return "";
+        }
+        StringBuilder formatted = new StringBuilder("'" + events.getFirst() + "'");
+        if(events.size()>1){
+            for (int i = 1; i< events.size(); i++){
+                formatted.append(", '").append(events.get(i)).append("'");
+            }
+        }
+        return formatted.toString();
     }
 }
