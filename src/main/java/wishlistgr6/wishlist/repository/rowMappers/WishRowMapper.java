@@ -1,7 +1,6 @@
 package wishlistgr6.wishlist.repository.rowMappers;
 
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 

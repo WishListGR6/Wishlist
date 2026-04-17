@@ -1,10 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+<div th:insert="~{fragments :: header}"></div>
 
+<div class="container-sm">
+    <div class="card">
+        <h5 class="card-header">Find din ønskeliste</h5>
+        <div class="card-body">
+            <form action="#" th:action="@{/login}" method="post">
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="listID" id="listID" placeholder="Indtast dit ønskeliste URL" value="abcd1234">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="password" id="password" placeholder="Indtast dit ønskeliste password" value="o1234">
+                </div>
+                    <button type="submit" class="btn btn-primary">Søg</button>
+                </form>
+    </div>
+        </div>
+        <div class="card mt-3">
+            <h5 class="card-header">Klik for at oprette en ønskeliste</h5>
+            <div class="card-body">
+            <form action="#" th:action="@{/login/create}" method="post">
+                <button type="submit" class="btn btn-primary">Opret ønske</button>
+            </form>
+                </div>
+        </div>
+</div>
+</div>
 </body>
-</html>

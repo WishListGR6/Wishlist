@@ -1,13 +1,11 @@
 package wishlistgr6.wishlist.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.rowMappers.WishlistRowMapper;
 
-import java.sql.ResultSet;
 import java.util.List;
 import java.util.Random;
 
