@@ -93,9 +93,7 @@ public class WishlistRepositoryTest {
         assertFalse(repository.checkGuestPassword("abcd1234", "Wrong password"));
     }
 
-    @Test
-    void createWishlist(){
-        Wishlist newTestlist = new Wishlist();
+    private String createNewWishlist(Wishlist newTestlist){
         newTestlist.addNoEvent();
         newTestlist.setName("Testlist");
         String testOwnerPassword = "ownerPassword";
@@ -106,38 +104,28 @@ public class WishlistRepositoryTest {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return listID;
+    }
+    @Test
+    void createWishlist(){
+        Wishlist newTestlist = new Wishlist();
+        String listID = createNewWishlist(newTestlist);
         assertEquals(newTestlist, repository.getWishlist(listID));
         assertNotEquals(repository.getWishlist("abcd1234"), repository.getWishlist(listID));
     }
     @Test
     void createWishlistContainsNoEvent(){
         Wishlist newTestlist = new Wishlist();
-        newTestlist.addNoEvent();
-        newTestlist.setName("Testlist");
-        String testOwnerPassword = "ownerPassword";
-        String testGuestPassword = "guestPassword";
-        String listID;
-        try {
-            listID = repository.createWishlist(newTestlist, testOwnerPassword, testGuestPassword);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        String listID = createNewWishlist(newTestlist);
         assert(repository.getWishlist(listID).getEvents().contains(testList.getEvents().getFirst()));
         assert(newTestlist.getEvents().contains(testList.getEvents().getFirst()));
     }
     @Test
     void createWishlistTestPasswords(){
         Wishlist newTestlist = new Wishlist();
-        newTestlist.addNoEvent();
-        newTestlist.setName("Testlist");
         String testOwnerPassword = "ownerPassword";
         String testGuestPassword = "guestPassword";
-        String listID;
-        try {
-            listID = repository.createWishlist(newTestlist, testOwnerPassword, testGuestPassword);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        String listID = createNewWishlist(newTestlist);
         assertTrue(repository.checkOwnerPassword(listID, testOwnerPassword));
         assertTrue(repository.checkGuestPassword(listID, testGuestPassword));
         assertFalse(repository.checkOwnerPassword(listID, "Wrong Password"));
