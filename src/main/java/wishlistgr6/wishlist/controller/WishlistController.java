@@ -68,13 +68,14 @@ public class WishlistController {
     @GetMapping("/createWish")
     public String createWish(Model model, HttpSession session) {
         Wish wish = new Wish();
-
         model.addAttribute("wish", wish);
+        model.addAttribute("events", wishlist.getEvents());
         return "new-wish";
     }
 
     @PostMapping("/addWish")
     public String addWish(@ModelAttribute Wish wish, String listID, HttpSession session) {
+        this.wishlist.addWish(wish);
         service.addWish(wish, listID);
         return "redirect:/wishlist";
     }

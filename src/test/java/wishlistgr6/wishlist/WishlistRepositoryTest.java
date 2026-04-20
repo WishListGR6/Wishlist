@@ -92,4 +92,5 @@ public class WishlistRepositoryTest {
         assertFalse(repository.checkGuestPassword("abcd1234", "Wrong password"));
     }
 
+
 }

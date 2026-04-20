@@ -2,10 +2,12 @@ package wishlistgr6.wishlist.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.WishlistRepository;
 
+import java.sql.Date;
 import java.util.List;
 
 @Transactional
@@ -28,6 +30,9 @@ public class WishlistService {
 
 
     public String addWish(Wish wish, String listID) {
+        if (wish.getEvents().isEmpty()){
+            wish.addEvent(new Event("No event", Date.valueOf("2050-01-01")));
+        }
         return repository.addWish(wish, listID);
     }
 
