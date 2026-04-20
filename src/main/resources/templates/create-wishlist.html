@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Opret Wishlist</title>
+</head>
+<body>
+
+<main>
+    <h3>Opret ny ønskeliste</h3>
+    <p>
+        Et listeID som bruges til at tilgå listen vil blive autogeneret ved indsendelse af formular.
+    </p>
+    <form action = "#" th:action="@{/wishlist/create}" th:object="${newWishlist}" method="post">
+        <label>
+            Navn:
+            <input type="text" th:field="*{name}">
+            <br>
+        </label>
+        <label>
+            Ejer Password:
+            <input type="text" th:field="${ownerPassword}">
+            <br>
+        </label>
+        <label>
+            Gæste Password:
+            <input type="text" th:field="${guestPassword}">
+            <br>
+        </label>
+        <button type="submit">Lav liste</button>
+    </form>
+</main>
+</body>
+</html>

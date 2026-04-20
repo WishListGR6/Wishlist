@@ -2,9 +2,11 @@ package wishlistgr6.wishlist.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import wishlistgr6.wishlist.exceptions.EventsAlreadyExistException;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.WishlistRepository;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Transactional
@@ -25,4 +27,8 @@ public class WishlistService {
     public boolean checkOwnerPassword(String listID, String password){return repository.checkOwnerPassword(listID, password);}
     public boolean checkGuestPassword(String listID, String password){return repository.checkGuestPassword(listID, password);}
 
+    public String createWishlist(Wishlist newWishlist, String ownerPassword, String guestPassword) throws EventsAlreadyExistException, SQLException {
+        newWishlist.addNoEvent();
+        return repository.createWishlist(newWishlist, ownerPassword, guestPassword);
+    }
 }
