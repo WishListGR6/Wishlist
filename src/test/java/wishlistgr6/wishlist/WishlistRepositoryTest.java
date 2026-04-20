@@ -51,6 +51,22 @@ public class WishlistRepositoryTest {
     }
 
     @Test
+    void updateWishinWishList() {
+        String originalWishName = "Sample wish";
+        Wish updatedWish = new Wish(originalWishName, "new description", "new URL", "new sample comments", 8.95, false);
+        repository.updateWish(updatedWish, "abcd1234", originalWishName);
+        Wishlist wishlist = repository.getWishlist("abcd1234");
+        Wish result = wishlist.getWishes().stream()
+                .filter(w -> w.getName().equals(originalWishName))
+                .findFirst()
+                .orElseThrow();
+        assertEquals("new description", result.getDescription());
+        assertEquals("new URL", result.getProductURL());
+        assertEquals("new sample comments", result.getComments());
+        assertEquals(8.95, result.getPrice());
+    }
+
+    @Test
     void getWishlist(){
         Wishlist wishlist = repository.getWishlist("abcd1234");
 
