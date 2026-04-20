@@ -98,7 +98,7 @@ public class WishlistController {
         return "edit-wishlist";
     }
 
-
+//
     @PostMapping("/wishlist/edit/{wishName}")
     public String updateAttraction(@PathVariable String wishName, @ModelAttribute Wish wish, HttpSession session) {
         String listID = (String) session.getAttribute("listID");
