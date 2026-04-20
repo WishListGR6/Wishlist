@@ -10,8 +10,6 @@ import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.WishlistRepository;
 import wishlistgr6.wishlist.service.WishlistService;
 
-import java.io.Serializable;
-
 @Controller
 @RequestMapping("/")
 public class WishlistController {
@@ -100,8 +98,21 @@ public class WishlistController {
 
 //
     @PostMapping("/wishlist/edit/{wishName}")
-    public String updateAttraction(@PathVariable String wishName, @ModelAttribute Wish wish, HttpSession session) {
+    public String updateWish(@PathVariable String wishName, @ModelAttribute Wish wish, HttpSession session) {
         String listID = (String) session.getAttribute("listID");
+        service.updateWish(wish, listID, wishName);
+        session.setAttribute("wishlist", service.getWishlist(listID));
+        return "redirect:/wishlist";
+    }
+
+    @PostMapping("/wishlist/reserve/{wishName}")
+    public String reserveWish(@PathVariable String wishName, HttpSession session) {
+        String listID = (String) session.getAttribute("listID");
+        Wishlist wishlist = (Wishlist) session.getAttribute("wishlist");
+        Wish wish = wishlist.getWishes().stream()
+                .filter(w -> w.getName().equals(wishName))
+                .findFirst().orElseThrow(() -> new WishNotFoundException());
+        wish.setReserved(true);
         service.updateWish(wish, listID, wishName);
         session.setAttribute("wishlist", service.getWishlist(listID));
         return "redirect:/wishlist";
