@@ -1,7 +1,9 @@
 # Wishlist
 
-tirsdag: undervisnings \
-onsdag: fysisk fuld dag \
-torsdag: pending \
-fredag: online scrum møde kl 10 \
-David tager stilling til IT&F inden fredag 
+| Dag | Plan |
+|-----|------|
+| mandag | mødes kl 10 |
+| tirsdag | fysisk 8-12 |
+| onsdag | 8-12 // Iso går kl 12 (har aftale kl 13) |
+| torsdag | Azure deployment + ITF fremlæggelse |
+| fredag | feedback/code review |

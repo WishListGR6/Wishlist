@@ -8,8 +8,7 @@ import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.service.WishlistService;
 
-import java.util.Random;
-import java.util.regex.Pattern;
+import java.io.Serializable;
 
 @Controller
 @RequestMapping("/")
@@ -21,6 +20,12 @@ public class WishlistController {
 
     private boolean isLoggedIn(HttpSession session){
         return session.getAttribute("isOwner") !=null;
+    }
+
+
+    @GetMapping("/")
+    public String home(){
+        return "login";
     }
 
     @GetMapping("/login/{listID}")
@@ -38,21 +43,26 @@ public class WishlistController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute String password, Model model, HttpSession session) {
-        if (service.checkOwnerPassword((String)model.getAttribute("listID"), password)){
+    public String login(@RequestParam String listID, @RequestParam String password, Model model, HttpSession session) {
+        if (service.checkOwnerPassword(listID, password)){
             session.setAttribute("isOwner", true);
-            session.setAttribute("wishlist", service.getWishlist((String) model.getAttribute("listID")));
+            session.setAttribute("wishlist", service.getWishlist(listID));
             return "redirect:/wishlist";
         }
 
-        if (service.checkGuestPassword((String)model.getAttribute("listID"), password)){
+        if (service.checkGuestPassword(listID, password)){
             session.setAttribute("isOwner", false);
-            session.setAttribute("wishlist", service.getWishlist((String) model.getAttribute("listID")));
+            session.setAttribute("wishlist", service.getWishlist(listID));
             return "redirect:/wishlist";
         }
 
         model.addAttribute("invalidPassword", true);
-        return "login/" + model.getAttribute("listID");
+        return "login";
+    }
+
+    @GetMapping("/wishlist")
+    public String wishlist() {
+        return "wishlist";
     }
 
     @GetMapping("/createWish")

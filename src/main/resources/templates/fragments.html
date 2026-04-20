@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>fragments</title>
+</head>
+<body>
+
+<div th:fragment="header">
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="#">Wishlist</a>
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/}">Hjem</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+</div>
+
+</body>
+</html>
