@@ -79,6 +79,21 @@ public class WishlistRepository {
         return "Wish added";
     }
 
+
+
+    public void updateWish(Wish wish, String listId, String originalWishName) {
+        String sqlWish =
+                """
+                update wish
+                set wish_name = ?, description = ?, product_url = ?, comments = ?, price = ?, isReserved = ?, image = ? where listID = ? and wish_name = ?
+               """;
+        jdbcTemplate.update(
+                sqlWish,
+                wish.getName(), wish.getDescription(), wish.getProductURL(),
+                wish.getComments(), wish.getPrice(), wish.isReserved(),
+                wish.getImage(), listId, originalWishName);
+    }
+
     private String formatEvents(List<Event> events){
         if(events.isEmpty()){
             return "";
@@ -91,4 +106,6 @@ public class WishlistRepository {
         }
         return formatted.toString();
     }
+
+
 }
