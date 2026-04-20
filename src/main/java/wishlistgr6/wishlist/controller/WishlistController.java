@@ -19,7 +19,7 @@ public class WishlistController {
     public WishlistController(WishlistService service) {this.service = service;}
 
     private boolean isLoggedIn(HttpSession session){
-        return session.getAttribute("isOwner") !=null;
+        return session.getAttribute("id") !=null;
     }
     private void logout(HttpSession session){
         wishlist = null;
@@ -77,15 +77,15 @@ public class WishlistController {
         return "wishlist";
     }
 
-    @GetMapping("/wishlist/new")
+    @GetMapping("/wishlist/create")
     public String newWishlist(Model model, HttpSession session){
         if (isLoggedIn(session)){
             logout(session);
         }
         Wishlist newWishlist = new Wishlist();
         model.addAttribute("newWishlist", newWishlist);
-        model.addAttribute("ownerPassword");
-        model.addAttribute("guestPassword");
+        model.addAttribute("ownerPassword", "");
+        model.addAttribute("guestPassword", "");
         return "create-wishlist";
     }
 
