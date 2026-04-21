@@ -13,6 +13,7 @@ import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.WishlistRepository;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -90,6 +91,45 @@ public class WishlistRepositoryTest {
     @Test
     void inCorrectGuestPassword(){
         assertFalse(repository.checkGuestPassword("abcd1234", "Wrong password"));
+    }
+
+    private String createNewWishlist(Wishlist newTestlist){
+        newTestlist.addNoEvent();
+        newTestlist.setName("Testlist");
+        String testOwnerPassword = "ownerPassword";
+        String testGuestPassword = "guestPassword";
+        String listID;
+        try {
+            listID = repository.createWishlist(newTestlist, testOwnerPassword, testGuestPassword);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listID;
+    }
+    @Test
+    void createWishlist(){
+        Wishlist newTestlist = new Wishlist();
+        String listID = createNewWishlist(newTestlist);
+        assertEquals(newTestlist, repository.getWishlist(listID));
+        assertNotEquals(repository.getWishlist("abcd1234"), repository.getWishlist(listID));
+    }
+    @Test
+    void createWishlistContainsNoEvent(){
+        Wishlist newTestlist = new Wishlist();
+        String listID = createNewWishlist(newTestlist);
+        assert(repository.getWishlist(listID).getEvents().contains(testList.getEvents().getFirst()));
+        assert(newTestlist.getEvents().contains(testList.getEvents().getFirst()));
+    }
+    @Test
+    void createWishlistTestPasswords(){
+        Wishlist newTestlist = new Wishlist();
+        String testOwnerPassword = "ownerPassword";
+        String testGuestPassword = "guestPassword";
+        String listID = createNewWishlist(newTestlist);
+        assertTrue(repository.checkOwnerPassword(listID, testOwnerPassword));
+        assertTrue(repository.checkGuestPassword(listID, testGuestPassword));
+        assertFalse(repository.checkOwnerPassword(listID, "Wrong Password"));
+        assertFalse(repository.checkGuestPassword(listID, "Wrong Password"));
     }
 
     @Test

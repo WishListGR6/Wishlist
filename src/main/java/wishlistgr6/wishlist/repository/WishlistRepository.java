@@ -1,14 +1,15 @@
 package wishlistgr6.wishlist.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
-import wishlistgr6.wishlist.repository.rowMappers.WishRowMapper;
 import wishlistgr6.wishlist.repository.rowMappers.WishlistRowMapper;
 
+import java.sql.*;
 import java.util.List;
 import java.util.Random;
 
@@ -65,7 +66,7 @@ public class WishlistRepository {
     public String addWish(Wish wish, String listID) {
         System.out.println(formatEvents(wish.getEvents()));
         String sqlWish = "insert into wish(listID, wish_name, description, product_url, comments, price, isReserved) " +
-                        "values(?, ?, ?, ?, ?, ?, false)";
+                "values(?, ?, ?, ?, ?, ?, false)";
 
         String sqlEvent = String.format("insert into event_wish(wishID, eventID) " +
                 "select w.wishID, e.eventID " +
@@ -78,6 +79,31 @@ public class WishlistRepository {
                 wish.getComments(), wish.getPrice());
         jdbcTemplate.update(sqlEvent);
         return "Wish added";
+    }
+
+    public String createWishlist(Wishlist newWishlist, String ownerPassword, String guestPassword) throws SQLException{
+        String generatedListId = generateAccessToken();
+        String sqlWishlist = """
+                insert into wishlist (listID, list_name, ownerPW, guestPW)
+                values (?, ?, ?, ?);
+                """;
+        String sqlNoEvents = """
+                insert into event (listID, event_name, event_date)
+                values (?, ?, ?);
+                """;
+        jdbcTemplate.update(sqlWishlist, preparedStatement -> {
+            preparedStatement.setString(1, generatedListId);
+            preparedStatement.setString(2, newWishlist.getName());
+            preparedStatement.setString(3, ownerPassword);
+            preparedStatement.setString(4, guestPassword);
+        });
+        jdbcTemplate.update(sqlNoEvents, preparedStatement -> {
+            Event event = newWishlist.getEvents().getFirst();
+            preparedStatement.setString(1, generatedListId);
+            preparedStatement.setString(2, event.title());
+            preparedStatement.setString(3, event.date().toString());
+        });
+        return generatedListId;
     }
 
     private String formatEvents(List<Event> events){
