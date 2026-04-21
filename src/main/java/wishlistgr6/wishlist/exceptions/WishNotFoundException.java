@@ -1,4 +1,4 @@
-package wishlistgr6.wishlist.controller.exceptions;
+package wishlistgr6.wishlist.exceptions;
 
 public class WishNotFoundException extends RuntimeException {
     public WishNotFoundException() {

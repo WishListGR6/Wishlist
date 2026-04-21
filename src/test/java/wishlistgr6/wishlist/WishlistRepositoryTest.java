@@ -50,6 +50,22 @@ public class WishlistRepositoryTest {
 
     }
 
+
+    @Test
+    void reserveWishInWishlist() {
+        String wishName = "Sample wish";
+        Wish reservedWish = new Wish(wishName, "description", "URL", "sample comments", 9.95, true);
+        repository.updateWish(reservedWish, "abcd1234", wishName);
+        Wishlist wishlist = repository.getWishlist("abcd1234");
+        Wish result = wishlist.getWishes().stream()
+                .filter(w -> w.getName().equals(wishName))
+                .findFirst()
+                .orElseThrow();
+        assertTrue(result.isReserved());
+    }
+
+
+
     @Test
     void updateWishinWishList() {
         String originalWishName = "Sample wish";
