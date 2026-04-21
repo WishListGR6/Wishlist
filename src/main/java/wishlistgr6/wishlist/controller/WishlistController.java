@@ -21,7 +21,7 @@ public class WishlistController {
     public WishlistController(WishlistService service) {this.service = service;}
 
     private boolean isLoggedIn(HttpSession session){
-        return session.getAttribute("id") !=null;
+        return session.getAttribute("listID") !=null;
     }
     private void logout(HttpSession session){
         wishlist = null;
