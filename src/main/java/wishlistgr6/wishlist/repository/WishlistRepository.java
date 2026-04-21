@@ -33,6 +33,20 @@ public class WishlistRepository {
                 .toString();
     }
 
+    public String generateShareLink(String listID) {
+        List<String> existing = getAccessTokens(listID);
+        if (!existing.isEmpty()) {
+            return "http://localhost:8080/login/" + listID + "?accessToken=" + existing.getFirst();
+        }
+        String accesstoken = generateAccessToken();
+        String SQL = "insert into access_token(token, listID) values(?, ?);";
+        jdbcTemplate.update(SQL, accesstoken, listID);
+        return "http://localhost:8080/login/" + listID + "?accessToken=" + accesstoken;
+    }
+
+
+
+
     public List<String> getAccessTokens(String listID){
         String sqlAccessToken =
                 "select access_token.token as token " +

@@ -35,5 +35,10 @@
     </tbody>
 
 </table>
+
+<a class="nav-link" th:href="@{/}">Hjem</a>
+<div th:if="${session.isOwner}">
+    <a th:href="@{/wishlist/share}" ><button>Generer et dele link</button></a>
+</div>
 </body>
 </html>
