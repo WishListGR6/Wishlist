@@ -1,5 +1,8 @@
 package wishlistgr6.wishlist.model;
 
+import wishlistgr6.wishlist.exceptions.EventsAlreadyExistException;
+
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,6 +17,7 @@ public class Wishlist {
         this.wishes = wishes;
         this.events = events;
     }
+    public Wishlist(){}
 
 
     public String getName() {
@@ -38,6 +42,11 @@ public class Wishlist {
 
     public void setEvents(List<Event> events) {
         this.events = events;
+    }
+
+    public void addNoEvent() throws EventsAlreadyExistException {
+        if(!events.isEmpty()){throw new EventsAlreadyExistException("Events already exists, hence addNoEvent should not be invoked");}
+        events.add(new Event("No event", Date.valueOf("2050-01-01")));
     }
 
     @Override
