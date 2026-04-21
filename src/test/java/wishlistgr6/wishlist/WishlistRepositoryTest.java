@@ -51,6 +51,50 @@ public class WishlistRepositoryTest {
 
     }
 
+
+    @Test
+    void reserveWishInWishlist() {
+        String wishName = "Sample wish";
+        Wish reservedWish = new Wish(wishName, "description", "URL", "sample comments", 9.95, true);
+        repository.updateWish(reservedWish, "abcd1234", wishName);
+        Wishlist wishlist = repository.getWishlist("abcd1234");
+        Wish result = wishlist.getWishes().stream()
+                .filter(w -> w.getName().equals(wishName))
+                .findFirst()
+                .orElseThrow();
+        assertTrue(result.isReserved());
+    }
+
+
+
+    @Test
+    void updateWishinWishList() {
+        String originalWishName = "Sample wish";
+        Wish updatedWish = new Wish(originalWishName, "new description", "new URL", "new sample comments", 8.95, false);
+        repository.updateWish(updatedWish, "abcd1234", originalWishName);
+        Wishlist wishlist = repository.getWishlist("abcd1234");
+        Wish result = wishlist.getWishes().stream()
+                .filter(w -> w.getName().equals(originalWishName))
+                .findFirst()
+                .orElseThrow();
+        assertEquals("new description", result.getDescription());
+        assertEquals("new URL", result.getProductURL());
+        assertEquals("new sample comments", result.getComments());
+        assertEquals(8.95, result.getPrice());
+    }
+
+    @Test
+    void updateWishNameInWishList() {
+        String originalWishName = "Sample wish";
+        Wish updatedWish = new Wish("Renamed wish", "description", "URL", "sample comments", 9.95, false);
+
+        repository.updateWish(updatedWish, "abcd1234", originalWishName);
+
+        Wishlist wishlist = repository.getWishlist("abcd1234");
+        assertTrue(wishlist.getWishes().stream().anyMatch(w -> w.getName().equals("Renamed wish")));
+        assertFalse(wishlist.getWishes().stream().anyMatch(w -> w.getName().equals(originalWishName)));
+    }
+
     @Test
     void getWishlist(){
         Wishlist wishlist = repository.getWishlist("abcd1234");

@@ -31,6 +31,13 @@
     <td th:text="${element.comments}"></td>
     <td th:text="${element.price}"></td>
     <td th:text="${element.isReserved()}"></td>
+        <td th:if="${session.isOwner}"><a th:href="@{/wishlist/edit/{wishName}(wishName=${element.name})}"><button class="btn btn-primary">Rediger ønske</button></a></td>
+        <td th:if="${!session.isOwner}">
+           <form action="#" th:action="@{/wishlist/reserve/{wishName}(wishName=${element.name})}" method="post">
+               <button class="btn btn-primary">Reservér ønske</button>
+           </form>
+        </td>
+
     </tr>
     </tbody>
 
