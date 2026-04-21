@@ -7,18 +7,15 @@ import org.springframework.web.bind.annotation.*;
 import wishlistgr6.wishlist.exceptions.WishNotFoundException;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
-import wishlistgr6.wishlist.repository.WishlistRepository;
 import wishlistgr6.wishlist.service.WishlistService;
 
 @Controller
 @RequestMapping("/")
 public class WishlistController {
     private final WishlistService service;
-    private final WishlistRepository wishlistRepository;
     private Wishlist wishlist;
     private boolean isOwner;
-    public WishlistController(WishlistService service, WishlistRepository wishlistRepository) {this.service = service;
-        this.wishlistRepository = wishlistRepository;
+    public WishlistController(WishlistService service) {this.service = service;
     }
 
     private boolean isLoggedIn(HttpSession session){
