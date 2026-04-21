@@ -45,7 +45,7 @@ public class WishlistRowMapper implements RowMapper<Wishlist> {
                 and wish.listID = ?
                 join event
                 on event.eventID = event_wish.eventID
-                order by wish.wish_name
+                order by wish.wishID
                 """;
 
         return jdbcTemplate.query(SQLWishes, new WishRowMapper(), listID);

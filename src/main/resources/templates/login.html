@@ -27,7 +27,9 @@
         <div class="card mt-3">
             <h5 class="card-header">Klik for at oprette en ønskeliste</h5>
             <div class="card-body">
-                <a th:href="@{/createWish}"><button class="btn btn-primary">Opret ønske</button></a>
+            <form action="#" th:action="@{/wishlist/create}" method="get">
+                <button type="submit" class="btn btn-primary">Opret ønske</button>
+            </form>
                 </div>
         </div>
 </div>
