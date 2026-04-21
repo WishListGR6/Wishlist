@@ -92,6 +92,7 @@ class WishlistControllerTest {
         accessTokens.add(accessToken);
         when(wishlistService.getAccessTokens(listID)).thenReturn(accessTokens);
         when(wishlistService.getWishlist(listID)).thenReturn(testList);
+        when(session.getAttribute("isOwner")).thenReturn(false);
 
         mockMvc.perform(get("/login/" + listID)
                         .param("accessToken", accessToken)
@@ -109,6 +110,7 @@ class WishlistControllerTest {
         List<String> accessTokens = new ArrayList<>();
         accessTokens.add(accessToken);
         when(wishlistService.getAccessTokens(listID)).thenReturn(accessTokens);
+        when(session.getAttribute("isOwner")).thenReturn(false);
 
         mockMvc.perform(get("/login/" + listID)
                 .session(session))
