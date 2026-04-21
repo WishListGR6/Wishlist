@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Wish</title>
+</head>
+<body>
+<main>
+    <h3>Create new wish</h3>
+    <form action="#" th:action="@{/addWish}" th:object="${wish}" method="post">
+        <label>
+            Navn:
+            <input type="text" th:field="*{name}" required>
+        </label>
+        <br>
+        <label>
+            Beskrivelse:
+            <input type="text" th:field="*{description}">
+        </label>
+        <br>
+        <label>
+            Link:
+            <input type="url" th:field="*{productURL}">
+        </label>
+        <br>
+        <label>
+            Pris:
+            <input type="number" th:field="*{price}">
+        </label>
+        <br>
+        <label>
+            Kommentare:
+            <input type="text" th:field="*{comments}">
+        </label>
+        <br>
+        <label>
+            Event:
+            <select th:field="*{events}" size="1" multiple>
+                <option th:each="event: ${events}" th:value="${event}" th:text="${event}"></option>
+            </select>
+        </label>
+        <br>
+    <button type="submit">Opret Ønske</button>
+    <a th:href="@{/wishlist}">
+        <button type="button">Annuller</button>
+    </a>
+    </form>
+</main>
+</body>
+</html>
