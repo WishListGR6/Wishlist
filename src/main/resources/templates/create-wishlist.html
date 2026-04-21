@@ -11,20 +11,20 @@
     <p>
         Et listeID som bruges til at tilgå listen vil blive autogeneret ved indsendelse af formular.
     </p>
-    <form action = "#" th:action="@{/wishlist/create}" th:object="${newWishlist}" method="post">
+    <form action = "#" th:action="@{/wishlist/create}" method="post">
         <label>
             Navn:
-            <input type="text" th:field="*{name}">
+            <input type="text" th:field="${newWishlist.name}">
             <br>
         </label>
         <label>
             Ejer Password:
-            <input type="text" th:field="${ownerPassword}">
+            <input type="text" th:name="ownerPassword">
             <br>
         </label>
         <label>
             Gæste Password:
-            <input type="text" th:field="${guestPassword}">
+            <input type="text" th:name="guestPassword">
             <br>
         </label>
         <button type="submit">Lav liste</button>

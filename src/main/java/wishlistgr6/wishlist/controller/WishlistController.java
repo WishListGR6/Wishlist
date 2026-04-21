@@ -34,7 +34,7 @@ public class WishlistController {
     }
 
     @GetMapping("/login/{listID}")
-    public String showLogin(@PathVariable String listID, @RequestParam String accessToken, Model model, HttpSession session){
+    public String showLogin(@PathVariable String listID, @RequestParam(required = false) String accessToken, Model model, HttpSession session){
         //check if acessToken is good
         //pre-authenticated login
         if(service.getAccessTokens(listID).contains(accessToken) && accessToken != null){
@@ -89,10 +89,10 @@ public class WishlistController {
         return "create-wishlist";
     }
 
-    @PostMapping("wishlist/create")
+    @PostMapping("/wishlist/create")
     public String createWishlist(@ModelAttribute Wishlist newWishlist,
-                                 @ModelAttribute String ownerPassword,
-                                 @ModelAttribute String guestPassword, HttpSession session){
+                                 @RequestParam String ownerPassword,
+                                 @RequestParam String guestPassword, HttpSession session){
         this.wishlist = newWishlist;
         String newListID;
         try {
