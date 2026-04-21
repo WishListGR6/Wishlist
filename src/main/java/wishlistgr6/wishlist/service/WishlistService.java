@@ -3,6 +3,7 @@ package wishlistgr6.wishlist.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wishlistgr6.wishlist.exceptions.EventsAlreadyExistException;
+import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.WishlistRepository;
 

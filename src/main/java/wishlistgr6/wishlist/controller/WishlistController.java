@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import wishlistgr6.wishlist.exceptions.WishNotFoundException;
+import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.service.WishlistService;
 
@@ -19,12 +21,13 @@ public class WishlistController {
     public WishlistController(WishlistService service) {this.service = service;}
 
     private boolean isLoggedIn(HttpSession session){
-        return session.getAttribute("id") !=null;
+        return session.getAttribute("listID") !=null;
     }
     private void logout(HttpSession session){
         wishlist = null;
         isOwner = false;
         id = null;
+        session.invalidate();
     }
 
 
@@ -41,6 +44,7 @@ public class WishlistController {
             session.setAttribute("wishlist", service.getWishlist(listID));
             session.setAttribute("isOwner", false);
             session.setAttribute("listID", listID);
+            this.id=listID;
 
 
             return "wishlist";
@@ -56,6 +60,7 @@ public class WishlistController {
             session.setAttribute("isOwner", true);
             session.setAttribute("wishlist", service.getWishlist(listID));
             session.setAttribute("listID", listID);
+            this.id=listID;
 
             return "redirect:/wishlist";
         }
@@ -64,6 +69,8 @@ public class WishlistController {
             session.setAttribute("isOwner", false);
             session.setAttribute("wishlist", service.getWishlist(listID));
             session.setAttribute("listID", listID);
+            this.id=listID;
+
             return "redirect:/wishlist";
         }
 
@@ -102,6 +109,7 @@ public class WishlistController {
         session.setAttribute("wishlist", newWishlist);
         session.setAttribute("isOwner", true);
         session.setAttribute("listID", newListID);
+        this.id=newListID;
 
         return "redirect:/wishlist";
     }
@@ -121,7 +129,7 @@ public class WishlistController {
         Wishlist wishlist = (Wishlist) session.getAttribute("wishlist");
         Wish wish = wishlist.getWishes().stream()
                 .filter(w -> w.getName().equals(wishName))
-                .findFirst().orElseThrow(() -> new WishNotFoundException());
+                .findFirst().orElseThrow(WishNotFoundException::new);
         model.addAttribute("wish", wish);
         return "edit-wishlist";
     }
@@ -141,12 +149,13 @@ public class WishlistController {
         Wishlist wishlist = (Wishlist) session.getAttribute("wishlist");
         Wish wish = wishlist.getWishes().stream()
                 .filter(w -> w.getName().equals(wishName))
-                .findFirst().orElseThrow(() -> new WishNotFoundException());
+                .findFirst().orElseThrow(WishNotFoundException::new);
         wish.setReserved(true);
         service.updateWish(wish, listID, wishName);
         session.setAttribute("wishlist", service.getWishlist(listID));
         return "redirect:/wishlist";
     }
+
 
 
 }
