@@ -31,4 +31,8 @@ public class WishlistService {
         newWishlist.addNoEvent();
         return repository.createWishlist(newWishlist, ownerPassword, guestPassword);
     }
+
+    public void updateWish(Wish wish, String listId, String wishName) {
+        repository.updateWish(wish, listId, wishName);
+    }
 }

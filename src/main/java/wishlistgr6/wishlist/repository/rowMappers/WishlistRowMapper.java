@@ -31,7 +31,8 @@ public class WishlistRowMapper implements RowMapper<Wishlist> {
 
     private List<Wish> findWishes(String listID){
         String SQLWishes = """
-                select wish.wish_name as wish_name,
+                select
+                wish.wish_name as wish_name,
                 wish.description as description,
                 wish.product_url as product_url,
                 wish.comments as comments,
