@@ -138,7 +138,7 @@ public class WishlistRepositoryTest {
         newWish.addEvent(testList.getEvents().getFirst());
         repository.addWish(newWish, "abcd1234");
         Wishlist foundWishList = repository.getWishlist("abcd1234");
-        Wish foundWish = foundWishList.getWishes().getFirst();
+        Wish foundWish = foundWishList.getWishes().getLast();
         assertEquals(newWish, foundWish);
     }
     @Test
@@ -147,7 +147,7 @@ public class WishlistRepositoryTest {
         newWish2.addEvent(testList.getEvents().get(1));
         repository.addWish(newWish2, "abcd1234");
         Wishlist foundWishList = repository.getWishlist("abcd1234");
-        Wish foundWish = foundWishList.getWishes().getFirst();
+        Wish foundWish = foundWishList.getWishes().getLast();
         assertEquals(newWish2, foundWish);
     }
     @Test
@@ -157,7 +157,7 @@ public class WishlistRepositoryTest {
         newWish3.addEvent(testList.getEvents().get(2));
         repository.addWish(newWish3, "abcd1234");
         Wishlist foundWishList = repository.getWishlist("abcd1234");
-        Wish foundWish = foundWishList.getWishes().getFirst();
+        Wish foundWish = foundWishList.getWishes().getLast();
         assertEquals(newWish3, foundWish);
     }
 
