@@ -27,6 +27,7 @@ public class WishlistController {
         wishlist = null;
         isOwner = false;
         id = null;
+        session.invalidate();
     }
 
 
@@ -43,6 +44,7 @@ public class WishlistController {
             session.setAttribute("wishlist", service.getWishlist(listID));
             session.setAttribute("isOwner", false);
             session.setAttribute("listID", listID);
+            this.id=listID;
 
 
             return "wishlist";
@@ -58,6 +60,7 @@ public class WishlistController {
             session.setAttribute("isOwner", true);
             session.setAttribute("wishlist", service.getWishlist(listID));
             session.setAttribute("listID", listID);
+            this.id=listID;
 
             return "redirect:/wishlist";
         }
@@ -66,6 +69,8 @@ public class WishlistController {
             session.setAttribute("isOwner", false);
             session.setAttribute("wishlist", service.getWishlist(listID));
             session.setAttribute("listID", listID);
+            this.id=listID;
+
             return "redirect:/wishlist";
         }
 
@@ -104,6 +109,7 @@ public class WishlistController {
         session.setAttribute("wishlist", newWishlist);
         session.setAttribute("isOwner", true);
         session.setAttribute("listID", newListID);
+        this.id=newListID;
 
         return "redirect:/wishlist";
     }
@@ -149,6 +155,7 @@ public class WishlistController {
         session.setAttribute("wishlist", service.getWishlist(listID));
         return "redirect:/wishlist";
     }
+
 
 
 }
