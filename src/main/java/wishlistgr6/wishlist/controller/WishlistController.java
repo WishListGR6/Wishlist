@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import wishlistgr6.wishlist.exceptions.WishNotFoundException;
+import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.service.WishlistService;
 
@@ -121,7 +123,7 @@ public class WishlistController {
         Wishlist wishlist = (Wishlist) session.getAttribute("wishlist");
         Wish wish = wishlist.getWishes().stream()
                 .filter(w -> w.getName().equals(wishName))
-                .findFirst().orElseThrow(() -> new WishNotFoundException());
+                .findFirst().orElseThrow(WishNotFoundException::new);
         model.addAttribute("wish", wish);
         return "edit-wishlist";
     }
@@ -141,7 +143,7 @@ public class WishlistController {
         Wishlist wishlist = (Wishlist) session.getAttribute("wishlist");
         Wish wish = wishlist.getWishes().stream()
                 .filter(w -> w.getName().equals(wishName))
-                .findFirst().orElseThrow(() -> new WishNotFoundException());
+                .findFirst().orElseThrow(WishNotFoundException::new);
         wish.setReserved(true);
         service.updateWish(wish, listID, wishName);
         session.setAttribute("wishlist", service.getWishlist(listID));
