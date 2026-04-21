@@ -4,8 +4,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import wishlistgr6.wishlist.exceptions.WishNotFoundException;
-import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.service.WishlistService;
 
@@ -108,6 +106,12 @@ public class WishlistController {
         return "redirect:/wishlist";
     }
 
+    @GetMapping("/wishlist/share")
+    public String shareWishList(HttpSession session) {
+        String id = (String) session.getAttribute("listID");
+        session.setAttribute("shareURL", service.shareLink(id));
+        return "share-wishlist";
+    }
 
 
 

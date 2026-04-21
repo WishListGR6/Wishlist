@@ -24,6 +24,10 @@ public class WishlistService {
         return repository.getWishlist(listID);
     }
 
+    public String shareLink(String listID) {
+        return repository.generateShareLink(listID);
+    }
+
     public boolean checkOwnerPassword(String listID, String password){return repository.checkOwnerPassword(listID, password);}
     public boolean checkGuestPassword(String listID, String password){return repository.checkGuestPassword(listID, password);}
 
