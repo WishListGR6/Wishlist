@@ -27,10 +27,12 @@ public class WishlistService {
         return repository.getWishlist(listID);
     }
 
-    public boolean checkOwnerPassword(String listID, String password){return repository.checkOwnerPassword(listID, password);}
-    public boolean checkGuestPassword(String listID, String password) {
-        return repository.checkGuestPassword(listID, password);
+    public String shareLink(String listID) {
+        return repository.generateShareLink(listID);
     }
+
+    public boolean checkOwnerPassword(String listID, String password){return repository.checkOwnerPassword(listID, password);}
+    public boolean checkGuestPassword(String listID, String password){return repository.checkGuestPassword(listID, password);}
 
 
     public String addWish(Wish wish, String listID) {
@@ -42,6 +44,10 @@ public class WishlistService {
     public String createWishlist(Wishlist newWishlist, String ownerPassword, String guestPassword) throws EventsAlreadyExistException, SQLException {
         newWishlist.addNoEvent();
         return repository.createWishlist(newWishlist, ownerPassword, guestPassword);
+    }
+
+    public void updateWish(Wish wish, String listId, String wishName) {
+        repository.updateWish(wish, listId, wishName);
     }
 
 }

@@ -34,6 +34,20 @@ public class WishlistRepository {
                 .toString();
     }
 
+    public String generateShareLink(String listID) {
+        List<String> existing = getAccessTokens(listID);
+        if (!existing.isEmpty()) {
+            return "http://localhost:8080/login/" + listID + "?accessToken=" + existing.getFirst();
+        }
+        String accesstoken = generateAccessToken();
+        String SQL = "insert into access_token(token, listID) values(?, ?);";
+        jdbcTemplate.update(SQL, accesstoken, listID);
+        return "http://localhost:8080/login/" + listID + "?accessToken=" + accesstoken;
+    }
+
+
+
+
     public List<String> getAccessTokens(String listID){
         String sqlAccessToken =
                 "select access_token.token as token " +
@@ -105,6 +119,22 @@ public class WishlistRepository {
         });
         return generatedListId;
     }
+
+
+
+    public void updateWish(Wish wish, String listId, String originalWishName) {
+        String sqlWish =
+                """
+                update wish
+                set wish_name = ?, description = ?, product_url = ?, comments = ?, price = ?, isReserved = ?, image = ? where listID = ? and wish_name = ?
+               """;
+        jdbcTemplate.update(
+                sqlWish,
+                wish.getName(), wish.getDescription(), wish.getProductURL(),
+                wish.getComments(), wish.getPrice(), wish.isReserved(),
+                wish.getImage(), listId, originalWishName);
+    }
+
 
     private String formatEvents(List<Event> events){
         if(events.isEmpty()){

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Share Wishlist</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div th:insert="~{fragments :: header}"></div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="mb-3">
+                    <span style="font-size: 3rem;">🎁</span>
+                </div>
+                <h2 class="card-title fw-bold mb-2">Del din ønskeliste</h2>
+                <p class="text-muted mb-4">Del linket nedenfor med venner og familie, så de kan se dine ønsker.</p>
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" id="shareUrl" class="form-control form-control-lg" th:value="${session.shareURL}" readonly>
+            </div>
+            <a th:href="${session.shareURL}" class="btn btn-outline-secondary btn-sm mt-2">Åbn link</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
