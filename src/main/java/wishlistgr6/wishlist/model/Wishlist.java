@@ -1,10 +1,12 @@
 package wishlistgr6.wishlist.model;
 
 import wishlistgr6.wishlist.exceptions.EventsAlreadyExistException;
+import wishlistgr6.wishlist.exceptions.WishNotFoundException;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class Wishlist {
@@ -18,6 +20,20 @@ public class Wishlist {
         this.events = events;
     }
     public Wishlist(){}
+
+    public Wish findWishInWishList(String wishName) {
+        try {
+            for (Wish wish : wishes) {
+                if (wishName.equalsIgnoreCase(wish.getName())) {
+                    return wish;
+                }
+            }
+        }
+        catch(NoSuchElementException e) {
+            throw new WishNotFoundException("No wish by that name");
+        }
+        return null;
+    }
 
 
     public String getName() {
