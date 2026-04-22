@@ -167,7 +167,7 @@ public class WishlistRepository {
             preparedStatement.setString(1, wish.getName());
         });
         if(affectedRows==0){
-            throw new WishNotFoundException();
+            throw new WishNotFoundException("No wish with that name exists.");
         }
 
     }

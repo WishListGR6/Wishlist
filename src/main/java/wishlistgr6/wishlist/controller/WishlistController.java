@@ -138,33 +138,21 @@ public class WishlistController {
 
     @GetMapping("/wishlist/edit/{wishName}")
     public String editWish(@PathVariable String wishName, HttpSession session, Model model) {
-        Wishlist wishlist = (Wishlist) session.getAttribute("wishlist");
-        Wish wish = wishlist.getWishes().stream()
-                .filter(w -> w.getName().equals(wishName))
-                .findFirst().orElseThrow(WishNotFoundException::new);
+        Wish wish = wishlist.getWishByName(wishName);
+        service.updateWish(wish, id, wishName);
         model.addAttribute("wish", wish);
         return "edit-wishlist";
     }
 
-//
     @PostMapping("/wishlist/edit/{wishName}")
     public String updateWish(@PathVariable String wishName, @ModelAttribute Wish wish, HttpSession session) {
-        String listID = (String) session.getAttribute("listID");
-        service.updateWish(wish, listID, wishName);
-        session.setAttribute("wishlist", service.getWishlist(listID));
+        service.updateWish(wish, id, wishName);
         return "redirect:/wishlist";
     }
 
     @PostMapping("/wishlist/reserve/{wishName}")
     public String reserveWish(@PathVariable String wishName, HttpSession session) {
-        String listID = (String) session.getAttribute("listID");
-        Wishlist wishlist = (Wishlist) session.getAttribute("wishlist");
-        Wish wish = wishlist.getWishes().stream()
-                .filter(w -> w.getName().equals(wishName))
-                .findFirst().orElseThrow(WishNotFoundException::new);
-        wish.setReserved(true);
-        service.updateWish(wish, listID, wishName);
-        session.setAttribute("wishlist", service.getWishlist(listID));
+        service.reserveWish(id, wishName);
         return "redirect:/wishlist";
     }
 
