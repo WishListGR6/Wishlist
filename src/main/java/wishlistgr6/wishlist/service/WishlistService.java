@@ -3,6 +3,7 @@ package wishlistgr6.wishlist.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wishlistgr6.wishlist.exceptions.EventsAlreadyExistException;
+import wishlistgr6.wishlist.exceptions.WishNotFoundException;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.WishlistRepository;
@@ -39,5 +40,9 @@ public class WishlistService {
 
     public void updateWish(Wish wish, String listId, String wishName) {
         repository.updateWish(wish, listId, wishName);
+    }
+
+    public void deleteWish(Wish wish){
+        repository.deleteWish(wish);
     }
 }

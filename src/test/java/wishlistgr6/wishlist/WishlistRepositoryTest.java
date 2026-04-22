@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import wishlistgr6.wishlist.exceptions.WishNotFoundException;
 import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
@@ -174,6 +175,20 @@ public class WishlistRepositoryTest {
         assertTrue(repository.checkGuestPassword(listID, testGuestPassword));
         assertFalse(repository.checkOwnerPassword(listID, "Wrong Password"));
         assertFalse(repository.checkGuestPassword(listID, "Wrong Password"));
+    }
+
+    @Test
+    void delete_wish_successful(){
+        Wish wishToDelete = testList.getWishes().getLast();
+        repository.deleteWish(wishToDelete);
+
+        assertFalse(repository.getWishlist("abcd1234").getWishes().contains(wishToDelete));
+    }
+
+    @Test
+    void delete_wish_fails(){
+        Wish wishToDelete = new Wish();
+        assertThrows(WishNotFoundException.class, () -> {repository.deleteWish(wishToDelete);});
     }
 
 }
