@@ -38,17 +38,16 @@ public class WishlistService {
     public boolean checkGuestPassword(String listID, String password){return repository.checkGuestPassword(listID, password);}
 
 
-    public String addWish(Wish wish, String listID) {
+    public void addWish(Wish wish, String listID) {
         validateWish(wish);
         if (wish.getEvents().isEmpty()){
             wish.addEvent(new Event("No event", Date.valueOf("2050-01-01")));
         }
         try {
-            return repository.addWish(wish, listID);
+            repository.addWish(wish, listID);
         } catch (DataIntegrityViolationException ex ) {
-            throw new DuplicateWishException("A wish with this name already exists. Please, try another name.");
+            throw new DuplicateWishException("A wish with this name already exists.");
         }
-
 
     }
     public String createWishlist(Wishlist newWishlist, String ownerPassword, String guestPassword) throws EventsAlreadyExistException, SQLException {

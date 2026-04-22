@@ -77,7 +77,7 @@ public class WishlistRepository {
         return jdbcTemplate.query(SQLPassword, new SingleColumnRowMapper<>(), listID).getFirst().equals(password);
     }
 
-    public String addWish(Wish wish, String listID) {
+    public boolean addWish(Wish wish, String listID) {
         System.out.println(formatEvents(wish.getEvents()));
         String sqlWish = "insert into wish(listID, wish_name, description, product_url, comments, price, isReserved) " +
                 "values(?, ?, ?, ?, ?, ?, false)";
@@ -92,7 +92,7 @@ public class WishlistRepository {
         jdbcTemplate.update(sqlWish, listID, wish.getName(), wish.getDescription(), wish.getProductURL(),
                 wish.getComments(), wish.getPrice());
         jdbcTemplate.update(sqlEvent);
-        return "Wish added";
+        return true;
     }
 
     public String createWishlist(Wishlist newWishlist, String ownerPassword, String guestPassword) throws SQLException{

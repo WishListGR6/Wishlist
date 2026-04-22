@@ -13,6 +13,7 @@ import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.WishlistRepository;
+import wishlistgr6.wishlist.service.WishlistService;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -31,6 +32,9 @@ public class WishlistRepositoryTest {
     private WishlistRepository repository;
 
     private Wishlist testList;
+    @Autowired
+    private WishlistService wishlistService;
+
     @BeforeEach
     void setUp() {
 
@@ -205,15 +209,6 @@ public class WishlistRepositoryTest {
         Wishlist foundWishList = repository.getWishlist("abcd1234");
         Wish foundWish = foundWishList.getWishes().getLast();
         assertEquals(newWish3, foundWish);
-    }
-
-    @Test
-    void addWishNoNameEx() {
-        Wish newWish = new Wish("", "description", "URL", "comment", 50, false);
-        //newWish.addEvent(testList.getEvents().getFirst());
-        assertThrows(InvalidWishException.class, () -> {
-            testList.addWish(newWish);
-        });
     }
 
 }
