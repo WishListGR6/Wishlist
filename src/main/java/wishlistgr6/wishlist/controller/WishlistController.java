@@ -133,7 +133,7 @@ public class WishlistController {
 
     @GetMapping("/wishlist/edit/{wishName}")
     public String editWish(@PathVariable String wishName, HttpSession session, Model model) {
-        Wish wish = wishlist.findWishInWishList(wishName);
+        Wish wish = wishlist.getWishByName(wishName);
         service.updateWish(wish, id, wishName);
         model.addAttribute("wish", wish);
         return "edit-wishlist";

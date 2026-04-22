@@ -1,19 +1,15 @@
 package wishlistgr6.wishlist.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.MockitoSession;
-import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import wishlistgr6.wishlist.exceptions.WishNotFoundException;
 import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
@@ -24,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -35,10 +30,13 @@ class WishlistControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+
     @MockitoBean
     private WishlistService wishlistService;
 
-    private Wishlist testList;
+
+
+    private Wishlist wishlist;
     private MockHttpSession session;
     @BeforeEach
     void setUp() {
@@ -58,11 +56,12 @@ class WishlistControllerTest {
         testWishes.add(testWish);
         testWishes.add(testWish2);
         testWishes.add(testWish3);
-        testList = new Wishlist("Sample list", testWishes, testEvents);
+        wishlist = new Wishlist("Sample list", testWishes, testEvents);
 
         session = mock(MockHttpSession.class);
         session.setAttribute("listID", "abcd1234");
-        session.setAttribute("wishlist", testList);
+        session.setAttribute("wishlist", wishlist);
+        ReflectionTestUtils.setField(wishlist, "wishlist", wishlist);
 
     }
 
@@ -93,9 +92,9 @@ class WishlistControllerTest {
         List<String> accessTokens = new ArrayList<>();
         accessTokens.add(accessToken);
         when(wishlistService.getAccessTokens(listID)).thenReturn(accessTokens);
-        when(wishlistService.getWishlist(listID)).thenReturn(testList);
+        when(wishlistService.getWishlist(listID)).thenReturn(wishlist);
         when(session.getAttribute("isOwner")).thenReturn(false);
-        when(session.getAttribute("wishlist")).thenReturn(testList);
+        when(session.getAttribute("wishlist")).thenReturn(wishlist);
 
 
         mockMvc.perform(get("/login/" + listID)
@@ -124,16 +123,17 @@ class WishlistControllerTest {
                 .andExpect(model().attribute("listID", listID));
 
         verify(wishlistService).getAccessTokens(listID);
+
     }
 
     @Test
     void editWishEndPointShouldReturnEditWishlistView () throws Exception {
         String wishName = "Sample wish";
-        MockHttpSession session = new MockHttpSession();
-        session.setAttribute("wishlist", testList);
+        when(session.getAttribute("wishlist")).thenReturn(wishlist);
         mockMvc.perform(get("/wishlist/edit/" + wishName).session(session))
                 .andExpect(status().isOk())
                 .andExpect(view().name("edit-wishlist"));
+
     }
 
     @Test
@@ -162,7 +162,6 @@ class WishlistControllerTest {
     }
 
 
-
     @Test
     void login() {
     }
@@ -170,7 +169,7 @@ class WishlistControllerTest {
     @Test
     void wishlist_is_guest() throws Exception{
         when(session.getAttribute("isOwner")).thenReturn(false);
-        when(session.getAttribute("wishlist")).thenReturn(testList);
+        when(session.getAttribute("wishlist")).thenReturn(wishlist);
 
         mockMvc.perform(get("/wishlist")
                         .session(session))
@@ -180,7 +179,7 @@ class WishlistControllerTest {
     @Test
     void wishlist_is_owner() throws Exception{
         when(session.getAttribute("isOwner")).thenReturn(true);
-        when(session.getAttribute("wishlist")).thenReturn(testList);
+        when(session.getAttribute("wishlist")).thenReturn(wishlist);
 
         mockMvc.perform(get("/wishlist")
                         .session(session))

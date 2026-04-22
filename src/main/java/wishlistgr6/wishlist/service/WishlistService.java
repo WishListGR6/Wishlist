@@ -60,8 +60,8 @@ public class WishlistService {
     public void deleteWish(Wish wish){
         try {
             repository.deleteWish(wish);
-        } catch (WrongThreadException e) {
-            throw new WishNotFoundException();
+        } catch (WishNotFoundException e) {
+            throw new WishNotFoundException("No wish with that name exists.");
         }
     }
 }
