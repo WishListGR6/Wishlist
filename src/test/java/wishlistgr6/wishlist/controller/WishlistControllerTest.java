@@ -34,6 +34,9 @@ class WishlistControllerTest {
     @MockitoBean
     private WishlistService wishlistService;
 
+    @Autowired
+    private WishlistController wishlistController;
+
 
 
     private Wishlist wishlist;
@@ -57,11 +60,9 @@ class WishlistControllerTest {
         testWishes.add(testWish2);
         testWishes.add(testWish3);
         wishlist = new Wishlist("Sample list", testWishes, testEvents);
-
         session = mock(MockHttpSession.class);
-        session.setAttribute("listID", "abcd1234");
-        session.setAttribute("wishlist", wishlist);
-        ReflectionTestUtils.setField(wishlist, "wishlist", wishlist);
+        ReflectionTestUtils.setField(wishlistController, "wishlist", wishlist);
+        ReflectionTestUtils.setField(wishlistController, "id", "abcd1234");
 
     }
 
