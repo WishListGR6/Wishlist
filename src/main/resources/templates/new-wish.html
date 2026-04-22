@@ -41,7 +41,7 @@
         <label>
             Event:
             <select th:field="*{events}" size="1" multiple>
-                <option th:each="event: ${events}" th:value="${event}" th:text="${event}"></option>
+                <option th:each="event: ${events}" th:value="${event.title()}" th:text="${event.title()}"></option>
             </select>
         </label>
         <br>

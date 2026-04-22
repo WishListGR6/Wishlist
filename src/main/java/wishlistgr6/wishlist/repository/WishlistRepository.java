@@ -137,7 +137,7 @@ public class WishlistRepository {
 
     private String formatEvents(List<Event> events){
         if(events.isEmpty()){
-            return "'No event'";
+            return "No event";
         }
         StringBuilder formatted = new StringBuilder("'" + events.getFirst().title() + "'");
         if(events.size()>1){

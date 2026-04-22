@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import wishlistgr6.wishlist.exceptions.DuplicateWishException;
 import wishlistgr6.wishlist.exceptions.InvalidWishException;
 import wishlistgr6.wishlist.exceptions.WishNotFoundException;
+import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.service.WishlistService;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -175,13 +177,14 @@ public class WishlistController {
     }
 
     @PostMapping("/addWish")
-    public String addWish(@ModelAttribute Wish wish, String listID, HttpSession session, Model model) {
+    public String addWish(@ModelAttribute Wish wish, @ModelAttribute List<Event> events, String listID, HttpSession session, Model model) {
         try {
-        this.wishlist.addWish(wish);
-        service.addWish(wish, listID);
-        return "redirect:/wishlist";
+            this.wishlist.addWish(wish);
+            service.addWish(wish, listID);
+            return "redirect:/wishlist";
         } catch (InvalidWishException | DuplicateWishException ex) {
             model.addAttribute("wish", wish);
+            model.addAttribute("events", wishlist.getEvents());
             model.addAttribute("errorMessage", ex.getMessage());
             return "new-wish";
         }
