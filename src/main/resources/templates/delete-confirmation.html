@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Slet ønske</title>
+</head>
+<body>
+<form action="#" th:action="@{/wishlist/delete/{wishName}(wishName=${wishName})}" method="post">
+    <button type="submit">Slet</button>
+    <a th:href="@{/wishlist}"><button type="button">Fortryd</button></a>
+</form>
+
+</body>
+</html>
