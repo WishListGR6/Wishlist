@@ -1,7 +1,10 @@
 package wishlistgr6.wishlist.service;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import wishlistgr6.wishlist.exceptions.DuplicateWishException;
+import wishlistgr6.wishlist.exceptions.InvalidWishException;
 import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.exceptions.EventsAlreadyExistException;
@@ -36,10 +39,17 @@ public class WishlistService {
 
 
     public String addWish(Wish wish, String listID) {
+        validateWish(wish);
         if (wish.getEvents().isEmpty()){
             wish.addEvent(new Event("No event", Date.valueOf("2050-01-01")));
         }
-        return repository.addWish(wish, listID);
+        try {
+            return repository.addWish(wish, listID);
+        } catch (DataIntegrityViolationException ex ) {
+            throw new DuplicateWishException("A wish with this name already exists. Please, try another name.");
+        }
+
+
     }
     public String createWishlist(Wishlist newWishlist, String ownerPassword, String guestPassword) throws EventsAlreadyExistException, SQLException {
         newWishlist.addNoEvent();
@@ -50,4 +60,21 @@ public class WishlistService {
         repository.updateWish(wish, listId, wishName);
     }
 
+    public void validateWish (Wish wish) {
+        if (wish == null) {
+            throw new InvalidWishException("Can not create an empty wish.");
+        }
+        String name = wish.getName();
+        if (name == null || name.isEmpty()) {
+            throw new InvalidWishException("Name is required.");
+        }
+        if (name.length() > 100) {
+        throw new InvalidWishException("Name must be less then 100 characters.");
+        }
+    }
+
+    public void wishNameUnique(Wish wish, String listID) {
+        // check if name of the new wish is unique in the current wishlist
+        // if not unique, then throw new DuplicateWishException
+    }
 }

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import wishlistgr6.wishlist.exceptions.DuplicateWishException;
+import wishlistgr6.wishlist.exceptions.InvalidWishException;
 import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
@@ -203,6 +205,15 @@ public class WishlistRepositoryTest {
         Wishlist foundWishList = repository.getWishlist("abcd1234");
         Wish foundWish = foundWishList.getWishes().getLast();
         assertEquals(newWish3, foundWish);
+    }
+
+    @Test
+    void addWishNoNameEx() {
+        Wish newWish = new Wish("", "description", "URL", "comment", 50, false);
+        //newWish.addEvent(testList.getEvents().getFirst());
+        assertThrows(InvalidWishException.class, () -> {
+            testList.addWish(newWish);
+        });
     }
 
 }

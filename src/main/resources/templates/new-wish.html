@@ -8,6 +8,11 @@
 <main>
     <h3>Create new wish</h3>
     <form action="#" th:action="@{/addWish}" th:object="${wish}" method="post">
+
+        <div class="error-box" th:if="${errorMessage}">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
         <label>
             Navn:
             <input type="text" th:field="*{name}" required>
