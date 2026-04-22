@@ -3,12 +3,14 @@ package wishlistgr6.wishlist.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wishlistgr6.wishlist.exceptions.EventsAlreadyExistException;
+import wishlistgr6.wishlist.exceptions.WishNotFoundException;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.WishlistRepository;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Transactional
 @Service
@@ -37,7 +39,21 @@ public class WishlistService {
         return repository.createWishlist(newWishlist, ownerPassword, guestPassword);
     }
 
+    public void reserveWish(String listID, String wishName) {
+        Wishlist wishlist = repository.getWishlist(listID);
+        Wish wish = wishlist.findWishInWishList(wishName);
+        wish.setReserved(true);
+        updateWish(wish, listID, wishName);
+    }
+
+
+
     public void updateWish(Wish wish, String listId, String wishName) {
-        repository.updateWish(wish, listId, wishName);
+        try {
+            repository.updateWish(wish, listId, wishName);
+        } catch (NoSuchElementException e) {
+            throw new WishNotFoundException("Cant find a wish with that name");
+        }
+
     }
 }
