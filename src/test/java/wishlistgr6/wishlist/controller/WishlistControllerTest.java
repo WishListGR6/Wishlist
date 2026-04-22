@@ -13,6 +13,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import wishlistgr6.wishlist.exceptions.WishNotFoundException;
 import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
@@ -121,6 +122,43 @@ class WishlistControllerTest {
 
         verify(wishlistService).getAccessTokens(listID);
     }
+
+    @Test
+    void editWishEndPointShouldReturnEditWishlistView () throws Exception {
+        String wishName = "Sample wish";
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("wishlist", testList);
+        mockMvc.perform(get("/wishlist/edit/" + wishName).session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name("edit-wishlist"));
+    }
+
+    @Test
+    void shareWishListEndpointShouldReturnView() throws Exception {
+        mockMvc.perform(get("/wishlist/share"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("share-wishlist"));
+    }
+
+    @Test
+    void shareWishListShouldGenerateCorrectLink() throws Exception {
+        String listID = "abcd1234";
+        String accessToken = "access12";
+        String expectedLink = "http://localhost:8080/login/" + listID + "?accessToken=" + accessToken;
+        when(wishlistService.shareLink(listID)).thenReturn(expectedLink);
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("listID", listID);
+
+        mockMvc.perform(get("/wishlist/share").session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name("share-wishlist"))
+                .andExpect(request().sessionAttribute("shareURL", expectedLink));
+
+        verify(wishlistService).shareLink(listID);
+    }
+
+
 
     @Test
     void login() {
