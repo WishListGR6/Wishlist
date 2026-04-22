@@ -78,7 +78,6 @@ public class WishlistRepository {
     }
 
     public boolean addWish(Wish wish, String listID) {
-        System.out.println(formatEvents(wish.getEvents()));
         String sqlWish = "insert into wish(listID, wish_name, description, product_url, comments, price, isReserved) " +
                 "values(?, ?, ?, ?, ?, ?, false)";
 
