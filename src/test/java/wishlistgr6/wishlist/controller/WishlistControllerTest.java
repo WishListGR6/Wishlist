@@ -61,7 +61,8 @@ class WishlistControllerTest {
         testList = new Wishlist("Sample list", testWishes, testEvents);
 
         session = mock(MockHttpSession.class);
-        when(session.getAttribute("wishlist")).thenReturn(testList);
+        session.setAttribute("listID", "abcd1234");
+        session.setAttribute("wishlist", testList);
 
     }
 
@@ -94,6 +95,8 @@ class WishlistControllerTest {
         when(wishlistService.getAccessTokens(listID)).thenReturn(accessTokens);
         when(wishlistService.getWishlist(listID)).thenReturn(testList);
         when(session.getAttribute("isOwner")).thenReturn(false);
+        when(session.getAttribute("wishlist")).thenReturn(testList);
+
 
         mockMvc.perform(get("/login/" + listID)
                         .param("accessToken", accessToken)
@@ -165,11 +168,56 @@ class WishlistControllerTest {
     }
 
     @Test
-    void wishlist() {
+    void wishlist_is_guest() throws Exception{
+        when(session.getAttribute("isOwner")).thenReturn(false);
+        when(session.getAttribute("wishlist")).thenReturn(testList);
+
+        mockMvc.perform(get("/wishlist")
+                        .session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name("wishlist"));
+    }
+    @Test
+    void wishlist_is_owner() throws Exception{
+        when(session.getAttribute("isOwner")).thenReturn(true);
+        when(session.getAttribute("wishlist")).thenReturn(testList);
+
+        mockMvc.perform(get("/wishlist")
+                        .session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name("wishlist"));
     }
 
     @Test
     void newWishlist() {
+    }
+
+    @Test
+    void new_wishlist_no_session() throws Exception{
+        session.invalidate();
+        session.clearAttributes();
+
+        mockMvc.perform(get("/wishlist/create"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("create-wishlist"))
+                .andExpect(model().attributeExists("newWishlist"))
+                .andExpect(model().attributeExists("ownerPassword"))
+                .andExpect(model().attributeExists("guestPassword"));
+    }
+
+    @Test
+    void new_wishlist_with_session() throws Exception{
+        assertFalse(session.isInvalid());
+
+        mockMvc.perform(get("/wishlist/create")
+                        .session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name("create-wishlist"))
+                .andExpect(model().attributeExists("newWishlist"))
+                .andExpect(model().attributeExists("ownerPassword"))
+                .andExpect(model().attributeExists("guestPassword"));
+        assertNull(session.getAttribute("listID"));
+        assertNull(session.getAttribute("wishlist"));
     }
 
     @Test

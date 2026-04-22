@@ -41,10 +41,13 @@ public class WishlistController {
         //check if acessToken is good
         //pre-authenticated login
         if(service.getAccessTokens(listID).contains(accessToken) && accessToken != null){
-            session.setAttribute("wishlist", service.getWishlist(listID));
-            session.setAttribute("isOwner", false);
-            session.setAttribute("listID", listID);
+            this.wishlist = service.getWishlist(listID);
+            this.isOwner = false;
             this.id=listID;
+            session.setAttribute("wishlist", this.wishlist);
+            session.setAttribute("isOwner", isOwner);
+            session.setAttribute("listID", id);
+
 
 
             return "wishlist";
@@ -57,19 +60,23 @@ public class WishlistController {
     @PostMapping("/login")
     public String login(@RequestParam String listID, @RequestParam String password, Model model, HttpSession session) {
         if (service.checkOwnerPassword(listID, password)){
-            session.setAttribute("isOwner", true);
-            session.setAttribute("wishlist", service.getWishlist(listID));
-            session.setAttribute("listID", listID);
+            this.wishlist = service.getWishlist(listID);
+            this.isOwner = true;
             this.id=listID;
+            session.setAttribute("wishlist", this.wishlist);
+            session.setAttribute("isOwner", isOwner);
+            session.setAttribute("listID", id);
 
             return "redirect:/wishlist";
         }
 
         if (service.checkGuestPassword(listID, password)){
-            session.setAttribute("isOwner", false);
-            session.setAttribute("wishlist", service.getWishlist(listID));
-            session.setAttribute("listID", listID);
+            this.wishlist = service.getWishlist(listID);
+            this.isOwner = false;
             this.id=listID;
+            session.setAttribute("wishlist", this.wishlist);
+            session.setAttribute("isOwner", isOwner);
+            session.setAttribute("listID", id);
 
             return "redirect:/wishlist";
         }
@@ -99,17 +106,18 @@ public class WishlistController {
     public String createWishlist(@ModelAttribute Wishlist newWishlist,
                                  @RequestParam String ownerPassword,
                                  @RequestParam String guestPassword, HttpSession session){
-        this.wishlist = newWishlist;
         String newListID;
         try {
             newListID = service.createWishlist(newWishlist, ownerPassword, guestPassword);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        session.setAttribute("wishlist", newWishlist);
-        session.setAttribute("isOwner", true);
-        session.setAttribute("listID", newListID);
+        this.wishlist = newWishlist;
+        this.isOwner = true;
         this.id=newListID;
+        session.setAttribute("wishlist", wishlist);
+        session.setAttribute("isOwner", isOwner);
+        session.setAttribute("listID", id);
 
         return "redirect:/wishlist";
     }
@@ -156,6 +164,20 @@ public class WishlistController {
         return "redirect:/wishlist";
     }
 
+    @GetMapping("/wishlist/deleteConfirmation/{wishName}")
+    public String deleteWishConfirmation(@PathVariable String wishName, Model model, HttpSession session){
+        model.addAttribute("wishName", wishName);
+
+        return "delete-confirmation";
+    }
+
+    @PostMapping("/wishlist/delete/{wishName}")
+    public String deleteWish(@PathVariable String wishName, HttpSession session){
+        Wish wishToDelete = wishlist.getWishByName(wishName);
+        service.deleteWish(wishToDelete);
+        wishlist.getWishes().remove(wishToDelete);
+        return "redirect:/wishlist";
+    }
 
 
 }
