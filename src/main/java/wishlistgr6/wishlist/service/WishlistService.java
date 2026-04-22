@@ -43,6 +43,10 @@ public class WishlistService {
     }
 
     public void deleteWish(Wish wish){
-        repository.deleteWish(wish);
+        try {
+            repository.deleteWish(wish);
+        } catch (WrongThreadException e) {
+            throw new WishNotFoundException();
+        }
     }
 }

@@ -173,7 +173,6 @@ public class WishlistController {
 
     @PostMapping("/wishlist/delete/{wishName}")
     public String deleteWish(@PathVariable String wishName, HttpSession session){
-        System.out.println("wishname: " + wishName);
         Wish wishToDelete = wishlist.getWishByName(wishName);
         service.deleteWish(wishToDelete);
         wishlist.getWishes().remove(wishToDelete);
