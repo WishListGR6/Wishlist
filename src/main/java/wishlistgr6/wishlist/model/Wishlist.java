@@ -75,6 +75,10 @@ public class Wishlist {
         return foundWish;
     }
 
+    public void addWish(Wish wish) {
+        this.wishes.add(wish);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

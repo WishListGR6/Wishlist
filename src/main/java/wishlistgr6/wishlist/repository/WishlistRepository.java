@@ -78,6 +78,23 @@ public class WishlistRepository {
         return jdbcTemplate.query(SQLPassword, new SingleColumnRowMapper<>(), listID).getFirst().equals(password);
     }
 
+    public boolean addWish(Wish wish, String listID) {
+        String sqlWish = "insert into wish(listID, wish_name, description, product_url, comments, price, isReserved) " +
+                "values(?, ?, ?, ?, ?, ?, false)";
+
+        String sqlEvent = String.format("insert into event_wish(wishID, eventID) " +
+                "select w.wishID, e.eventID " +
+                "from (select wishID from wish " +
+                "where wish_name = '%s') as w " +
+                "cross join (select eventID from event " +
+                "where event_name in (%s)) as e ", wish.getName(), formatEvents(wish.getEvents()));
+
+        jdbcTemplate.update(sqlWish, listID, wish.getName(), wish.getDescription(), wish.getProductURL(),
+                wish.getComments(), wish.getPrice());
+        jdbcTemplate.update(sqlEvent);
+        return true;
+    }
+
     public String createWishlist(Wishlist newWishlist, String ownerPassword, String guestPassword) throws SQLException{
         String generatedListId = generateAccessToken();
         String sqlWishlist = """
@@ -120,12 +137,12 @@ public class WishlistRepository {
 
     private String formatEvents(List<Event> events){
         if(events.isEmpty()){
-            return "";
+            return "No event";
         }
-        StringBuilder formatted = new StringBuilder("'" + events.getFirst() + "'");
+        StringBuilder formatted = new StringBuilder("'" + events.getFirst().title() + "'");
         if(events.size()>1){
             for (int i = 1; i< events.size(); i++){
-                formatted.append(", '").append(events.get(i)).append("'");
+                formatted.append(", '").append(events.get(i).title()).append("'");
             }
         }
         return formatted.toString();

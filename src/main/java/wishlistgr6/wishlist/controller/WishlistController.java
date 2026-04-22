@@ -4,11 +4,16 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import wishlistgr6.wishlist.exceptions.DuplicateWishException;
+import wishlistgr6.wishlist.exceptions.InvalidWishException;
+import wishlistgr6.wishlist.exceptions.WishNotFoundException;
+import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.service.WishlistService;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -149,6 +154,28 @@ public class WishlistController {
     public String reserveWish(@PathVariable String wishName, HttpSession session) {
         service.reserveWish(id, wishName);
         return "redirect:/wishlist";
+    }
+
+    @GetMapping("/createWish")
+    public String createWish(Model model, HttpSession session) {
+        Wish wish = new Wish();
+        model.addAttribute("wish", wish);
+        model.addAttribute("events", wishlist.getEvents());
+        return "new-wish";
+    }
+
+    @PostMapping("/addWish")
+    public String addWish(@ModelAttribute Wish wish, @ModelAttribute List<Event> events, String listID, HttpSession session, Model model) {
+        try {
+            this.wishlist.addWish(wish);
+            service.addWish(wish, listID);
+            return "redirect:/wishlist";
+        } catch (InvalidWishException | DuplicateWishException ex) {
+            model.addAttribute("wish", wish);
+            model.addAttribute("events", wishlist.getEvents());
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "new-wish";
+        }
     }
 
     @GetMapping("/wishlist/deleteConfirmation/{wishName}")

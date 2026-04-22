@@ -1,13 +1,18 @@
 package wishlistgr6.wishlist.service;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wishlistgr6.wishlist.exceptions.EventsAlreadyExistException;
 import wishlistgr6.wishlist.exceptions.WishNotFoundException;
+import wishlistgr6.wishlist.exceptions.DuplicateWishException;
+import wishlistgr6.wishlist.exceptions.InvalidWishException;
+import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.WishlistRepository;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -34,6 +39,19 @@ public class WishlistService {
     public boolean checkOwnerPassword(String listID, String password){return repository.checkOwnerPassword(listID, password);}
     public boolean checkGuestPassword(String listID, String password){return repository.checkGuestPassword(listID, password);}
 
+
+    public void addWish(Wish wish, String listID) {
+        validateWish(wish);
+        if (wish.getEvents().isEmpty()){
+            wish.addEvent(new Event("No event", Date.valueOf("2050-01-01")));
+        }
+        try {
+            repository.addWish(wish, listID);
+        } catch (DataIntegrityViolationException ex ) {
+            throw new DuplicateWishException("A wish with this name already exists.");
+        }
+
+    }
     public String createWishlist(Wishlist newWishlist, String ownerPassword, String guestPassword) throws EventsAlreadyExistException, SQLException {
         newWishlist.addNoEvent();
         return repository.createWishlist(newWishlist, ownerPassword, guestPassword);
@@ -64,4 +82,18 @@ public class WishlistService {
             throw new WishNotFoundException("No wish with that name exists.");
         }
     }
+
+    public void validateWish (Wish wish) {
+        if (wish == null) {
+            throw new InvalidWishException("Can not create an empty wish.");
+        }
+        String name = wish.getName();
+        if (name == null || name.isEmpty()) {
+            throw new InvalidWishException("Name is required.");
+        }
+        if (name.length() > 100) {
+        throw new InvalidWishException("Name must be less then 100 characters.");
+        }
+    }
+
 }

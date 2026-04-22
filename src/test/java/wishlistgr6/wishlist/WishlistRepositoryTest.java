@@ -178,6 +178,35 @@ public class WishlistRepositoryTest {
     }
 
     @Test
+    void addWishWithNoEvent() {
+        Wish newWish = new Wish("New Wish", "description", "URL", "sample comments", 9.95, false);
+        newWish.addEvent(testList.getEvents().getFirst());
+        repository.addWish(newWish, "abcd1234");
+        Wishlist foundWishList = repository.getWishlist("abcd1234");
+        Wish foundWish = foundWishList.getWishes().getLast();
+        assertEquals(newWish, foundWish);
+    }
+    @Test
+    void addWishWithOneEvent() {
+        Wish newWish2 = new Wish("New Wish 2", "description 2", "URL 2", "sample comments 2", 14.95, false);
+        newWish2.addEvent(testList.getEvents().get(1));
+        repository.addWish(newWish2, "abcd1234");
+        Wishlist foundWishList = repository.getWishlist("abcd1234");
+        Wish foundWish = foundWishList.getWishes().getLast();
+        assertEquals(newWish2, foundWish);
+    }
+    @Test
+    void addWishTwoEvents() {
+        Wish newWish3 = new Wish("New Wish 3", "description 3", "URL 3", "sample comments 3", 99.95, false);
+        newWish3.addEvent(testList.getEvents().get(1));
+        newWish3.addEvent(testList.getEvents().get(2));
+        repository.addWish(newWish3, "abcd1234");
+        Wishlist foundWishList = repository.getWishlist("abcd1234");
+        Wish foundWish = foundWishList.getWishes().getLast();
+        assertEquals(newWish3, foundWish);
+    }
+
+    @Test
     void delete_wish_successful(){
         Wish wishToDelete = testList.getWishes().getLast();
         repository.deleteWish(wishToDelete);
