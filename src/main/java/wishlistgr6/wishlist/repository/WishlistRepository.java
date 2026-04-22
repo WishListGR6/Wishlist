@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
+import wishlistgr6.wishlist.exceptions.WishNotFoundException;
 import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
@@ -134,7 +135,6 @@ public class WishlistRepository {
                 wish.getImage(), listId, originalWishName);
     }
 
-
     private String formatEvents(List<Event> events){
         if(events.isEmpty()){
             return "'No event'";
@@ -147,4 +147,30 @@ public class WishlistRepository {
         }
         return formatted.toString();
     }
+
+    public void deleteWish(Wish wish){
+        String sqlJoinDelete =
+                """
+                delete from event_wish where wishID = (
+                       select wishID from wish where wish_name = ?
+                )
+                """;
+        String sqlDelete =
+                """
+                        delete from wish where wish_name = ?
+                        """;
+
+        jdbcTemplate.update(sqlJoinDelete, preparedStatement ->{
+           preparedStatement.setString(1, wish.getName());
+        });
+        int affectedRows = jdbcTemplate.update(sqlDelete, preparedStatement -> {
+            preparedStatement.setString(1, wish.getName());
+        });
+        if(affectedRows==0){
+            throw new WishNotFoundException();
+        }
+
+    }
+
+
 }

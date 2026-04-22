@@ -7,13 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import wishlistgr6.wishlist.exceptions.DuplicateWishException;
-import wishlistgr6.wishlist.exceptions.InvalidWishException;
+import wishlistgr6.wishlist.exceptions.WishNotFoundException;
 import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.WishlistRepository;
-import wishlistgr6.wishlist.service.WishlistService;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -32,9 +30,6 @@ public class WishlistRepositoryTest {
     private WishlistRepository repository;
 
     private Wishlist testList;
-    @Autowired
-    private WishlistService wishlistService;
-
     @BeforeEach
     void setUp() {
 
@@ -209,6 +204,20 @@ public class WishlistRepositoryTest {
         Wishlist foundWishList = repository.getWishlist("abcd1234");
         Wish foundWish = foundWishList.getWishes().getLast();
         assertEquals(newWish3, foundWish);
+    }
+
+    @Test
+    void delete_wish_successful(){
+        Wish wishToDelete = testList.getWishes().getLast();
+        repository.deleteWish(wishToDelete);
+
+        assertFalse(repository.getWishlist("abcd1234").getWishes().contains(wishToDelete));
+    }
+
+    @Test
+    void delete_wish_fails(){
+        Wish wishToDelete = new Wish();
+        assertThrows(WishNotFoundException.class, () -> {repository.deleteWish(wishToDelete);});
     }
 
 }

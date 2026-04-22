@@ -3,11 +3,12 @@ package wishlistgr6.wishlist.service;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import wishlistgr6.wishlist.exceptions.EventsAlreadyExistException;
+import wishlistgr6.wishlist.exceptions.WishNotFoundException;
 import wishlistgr6.wishlist.exceptions.DuplicateWishException;
 import wishlistgr6.wishlist.exceptions.InvalidWishException;
 import wishlistgr6.wishlist.model.Event;
 import wishlistgr6.wishlist.model.Wish;
-import wishlistgr6.wishlist.exceptions.EventsAlreadyExistException;
 import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.repository.WishlistRepository;
 
@@ -59,6 +60,14 @@ public class WishlistService {
         repository.updateWish(wish, listId, wishName);
     }
 
+    public void deleteWish(Wish wish){
+        try {
+            repository.deleteWish(wish);
+        } catch (WrongThreadException e) {
+            throw new WishNotFoundException();
+        }
+    }
+
     public void validateWish (Wish wish) {
         if (wish == null) {
             throw new InvalidWishException("Can not create an empty wish.");
@@ -72,8 +81,4 @@ public class WishlistService {
         }
     }
 
-    public void wishNameUnique(Wish wish, String listID) {
-        // check if name of the new wish is unique in the current wishlist
-        // if not unique, then throw new DuplicateWishException
-    }
 }

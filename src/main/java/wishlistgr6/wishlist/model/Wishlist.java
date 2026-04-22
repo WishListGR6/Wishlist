@@ -49,6 +49,16 @@ public class Wishlist {
         events.add(new Event("No event", Date.valueOf("2050-01-01")));
     }
 
+    public Wish getWishByName(String name){
+        Wish foundWish = null;
+        for(Wish wish: wishes){
+            if(wish.getName().equals(name)){
+                foundWish = wish;
+            }
+        }
+        return foundWish;
+    }
+
     public void addWish(Wish wish) {
         this.wishes.add(wish);
     }
