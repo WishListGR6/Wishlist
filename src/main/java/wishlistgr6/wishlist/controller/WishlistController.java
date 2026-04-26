@@ -13,7 +13,9 @@ import wishlistgr6.wishlist.model.Wishlist;
 import wishlistgr6.wishlist.service.WishlistService;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/")
@@ -139,13 +141,14 @@ public class WishlistController {
     @GetMapping("/wishlist/edit/{wishName}")
     public String editWish(@PathVariable String wishName, HttpSession session, Model model) {
         Wish wish = wishlist.getWishByName(wishName);
-        service.updateWish(wish, id, wishName);
         model.addAttribute("wish", wish);
+        model.addAttribute("events", wishlist.getEvents());
         return "edit-wishlist";
     }
 
     @PostMapping("/wishlist/edit/{wishName}")
-    public String updateWish(@PathVariable String wishName, @ModelAttribute Wish wish, HttpSession session) {
+    public String updateWish(@PathVariable String wishName, @ModelAttribute Wish wish, @RequestParam(name = "eventNames", required = false) List<String> eventNames, HttpSession session) {
+        wish.setEvents(resolveEvents(eventNames));
         service.updateWish(wish, id, wishName);
         return "redirect:/wishlist";
     }
@@ -158,17 +161,17 @@ public class WishlistController {
 
     @GetMapping("/createWish")
     public String createWish(Model model, HttpSession session) {
-        Wish wish = new Wish();
-        model.addAttribute("wish", wish);
-        model.addAttribute("events", wishlist.getEvents());
+        model.addAttribute("wish", new Wish());
         return "new-wish";
     }
 
+
     @PostMapping("/addWish")
-    public String addWish(@ModelAttribute Wish wish, @ModelAttribute List<Event> events, String listID, HttpSession session, Model model) {
+    public String addWish(@ModelAttribute Wish wish, @RequestParam(name = "eventNames", required = false) List<String> events, HttpSession session, Model model) {
+        wish.setEvents(resolveEvents(events));
         try {
-            this.wishlist.addWish(wish);
-            service.addWish(wish, listID);
+            service.addWish(wish, id);
+            wishlist.addWish(wish);
             return "redirect:/wishlist";
         } catch (InvalidWishException | DuplicateWishException ex) {
             model.addAttribute("wish", wish);
@@ -181,7 +184,6 @@ public class WishlistController {
     @GetMapping("/wishlist/deleteConfirmation/{wishName}")
     public String deleteWishConfirmation(@PathVariable String wishName, Model model, HttpSession session){
         model.addAttribute("wishName", wishName);
-
         return "delete-confirmation";
     }
 
@@ -192,6 +194,15 @@ public class WishlistController {
         wishlist.getWishes().remove(wishToDelete);
         return "redirect:/wishlist";
     }
+
+
+    private List<Event> resolveEvents(List<String> eventNames) {
+        if (eventNames == null) return new ArrayList<>();
+        return wishlist.getEvents().stream()
+                .filter(e -> eventNames.contains(e.title()))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
 
 
 }

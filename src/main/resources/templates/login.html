@@ -3,35 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ønskelisten</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 <div th:insert="~{fragments :: header}"></div>
 
-<div class="container-sm">
-    <div class="card">
-        <h5 class="card-header">Find din ønskeliste</h5>
-        <div class="card-body">
-            <form action="#" th:action="@{/login}" method="post">
-                <div class="mb-3">
-                    <input type="text" class="form-control" name="listID" id="listID" placeholder="Indtast dit ønskeliste URL" value="abcd1234">
-                </div>
-                <div class="mb-3">
-                    <input type="text" class="form-control" name="password" id="password" placeholder="Indtast dit ønskeliste password" value="o1234">
-                </div>
-                    <button type="submit" class="btn btn-primary">Søg</button>
-                </form>
+<div class="container">
+    <div class="hero-section">
+        <h1>🎁 Ønskelisten</h1>
+        <p>Del dine ønsker med venner og familie</p>
     </div>
-        </div>
-        <div class="card mt-3">
-            <h5 class="card-header">Klik for at oprette en ønskeliste</h5>
-            <div class="card-body">
-            <form action="#" th:action="@{/wishlist/create}" method="get">
-                <button type="submit" class="btn btn-primary">Opret ønske</button>
-            </form>
+
+    <div class="row justify-content-center g-4 pb-5">
+        <div class="col-md-5">
+            <div class="card form-card h-100">
+                <div class="card-header">Find din ønskeliste</div>
+                <div class="card-body p-4">
+                    <form action="#" th:action="@{/login}" method="post">
+                        <div class="mb-3">
+                            <label for="listID" class="form-label">Liste-ID</label>
+                            <input type="text" class="form-control" name="listID" id="listID" th:value="${listID}" placeholder="f.eks. abcd1234">
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Indtast dit password" required>
+                        </div>
+                        <button type="submit" class="btn btn-brand w-100">Gå til liste</button>
+                    </form>
                 </div>
+            </div>
         </div>
-</div>
+
+        <div class="col-md-5">
+            <div class="card form-card h-100">
+                <div class="card-header">Opret ny ønskeliste</div>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <p class="text-muted">Lav din egen ønskeliste og del den med dem du holder af.</p>
+                    <form action="#" th:action="@{/wishlist/create}" method="get">
+                        <button type="submit" class="btn btn-brand w-100">Opret ønskeliste</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
+</html>

@@ -1,34 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Opret Wishlist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Opret ønskeliste – Ønskelisten</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+<div th:insert="~{fragments :: header}"></div>
 
-<main>
-    <h3>Opret ny ønskeliste</h3>
-    <p>
-        Et listeID som bruges til at tilgå listen vil blive autogeneret ved indsendelse af formular.
-    </p>
-    <form action = "#" th:action="@{/wishlist/create}" method="post">
-        <label>
-            Navn:
-            <input type="text" th:field="${newWishlist.name}">
-            <br>
-        </label>
-        <label>
-            Ejer Password:
-            <input type="text" th:name="ownerPassword">
-            <br>
-        </label>
-        <label>
-            Gæste Password:
-            <input type="text" th:name="guestPassword">
-            <br>
-        </label>
-        <button type="submit">Lav liste</button>
-    </form>
-</main>
+<div class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card form-card">
+                <div class="card-header">Opret ny ønskeliste</div>
+                <div class="card-body p-4">
+                    <p class="text-muted mb-4">Et liste-ID til at tilgå listen genereres automatisk.</p>
+                    <form action="#" th:action="@{/wishlist/create}" method="post">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Navn</label>
+                            <input type="text" class="form-control" id="name" th:field="${newWishlist.name}" placeholder="Hvad skal listen hedde?">
+                        </div>
+                        <div class="mb-3">
+                            <label for="ownerPassword" class="form-label">Ejer-password</label>
+                            <input type="password" class="form-control" id="ownerPassword" th:name="ownerPassword" placeholder="Dit hemmelige password">
+                        </div>
+                        <div class="mb-4">
+                            <label for="guestPassword" class="form-label">Gæste-password</label>
+                            <input type="password" class="form-control" id="guestPassword" th:name="guestPassword" placeholder="Password til dine gæster">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-brand flex-grow-1">Lav liste</button>
+                            <a th:href="@{/}" class="btn btn-outline-secondary">Annuller</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

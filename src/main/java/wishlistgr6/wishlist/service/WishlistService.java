@@ -48,7 +48,7 @@ public class WishlistService {
         try {
             repository.addWish(wish, listID);
         } catch (DataIntegrityViolationException ex ) {
-            throw new DuplicateWishException("A wish with this name already exists.");
+            throw new DuplicateWishException("Der findes allerede et ønske med det navn.");
         }
 
     }
@@ -67,12 +67,14 @@ public class WishlistService {
 
 
     public void updateWish(Wish wish, String listId, String wishName) {
+        if (wish.getEvents().isEmpty()) {
+            wish.addEvent(new Event("No event", Date.valueOf("2050-01-01")));
+        }
         try {
             repository.updateWish(wish, listId, wishName);
         } catch (NoSuchElementException e) {
             throw new WishNotFoundException("Cant find a wish with that name");
         }
-
     }
 
     public void deleteWish(Wish wish){

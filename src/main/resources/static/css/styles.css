@@ -1,0 +1,134 @@
+:root {
+  --brand-amber: #FFB400;
+  --brand-amber-dark: #e6a200;
+  --brand-coral: #EB9486;
+  --brand-coral-light: #fdf1ef;
+  --brand-green: #CAE7B9;
+  --brand-bg: #FFFAF3;
+  --brand-text: #333;
+}
+
+body {
+  background-color: var(--brand-bg);
+  color: var(--brand-text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.navbar-custom {
+  background-color: #fff;
+  border-bottom: 2px solid var(--brand-coral);
+}
+
+.navbar-custom .navbar-brand {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--brand-coral);
+}
+
+.navbar-custom .nav-link {
+  color: #666;
+}
+
+.navbar-custom .nav-link:hover {
+  color: var(--brand-amber);
+}
+
+.btn-brand {
+  background-color: var(--brand-amber);
+  border-color: var(--brand-amber);
+  color: #fff;
+}
+
+.btn-brand:hover,
+.btn-brand:focus {
+  background-color: var(--brand-amber-dark);
+  border-color: var(--brand-amber-dark);
+  color: #fff;
+}
+
+.wish-card {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+}
+
+.wish-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+.wish-card .card-header {
+  background-color: var(--brand-coral-light);
+  border-bottom: 1px solid #f5c4bc;
+  font-weight: 600;
+  color: var(--brand-coral);
+}
+
+.reserved-badge {
+  background-color: var(--brand-green);
+  color: #2e7d32;
+  font-size: 0.78rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 1rem;
+  font-weight: 500;
+}
+
+.wish-card.is-reserved {
+  border: 2px solid var(--brand-green) !important;
+}
+
+.event-pill {
+  display: inline-block;
+  cursor: pointer;
+  padding: 0.35rem 1rem;
+  border-radius: 2rem;
+  border: 2px solid #ddd;
+  background-color: #fff;
+  color: #666;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.event-pill:hover {
+  border-color: var(--brand-amber);
+  color: var(--brand-amber);
+}
+
+.event-pill.active {
+  background-color: var(--brand-amber);
+  border-color: var(--brand-amber);
+  color: #fff;
+}
+
+.hero-section {
+  padding: 3rem 0 2rem;
+  text-align: center;
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--brand-coral);
+}
+
+.hero-section p {
+  color: #888;
+  font-size: 1.1rem;
+}
+
+.form-card {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+.form-card .card-header {
+  background-color: var(--brand-coral-light);
+  border-bottom: 1px solid #f5c4bc;
+  border-radius: 1rem 1rem 0 0 !important;
+  font-weight: 600;
+  color: var(--brand-coral);
+  padding: 1rem 1.5rem;
+}

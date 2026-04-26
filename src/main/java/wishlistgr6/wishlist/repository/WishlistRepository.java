@@ -13,6 +13,7 @@ import wishlistgr6.wishlist.repository.rowMappers.WishlistRowMapper;
 import java.sql.*;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Repository
 public class WishlistRepository {
@@ -69,28 +70,32 @@ public class WishlistRepository {
 
     public boolean checkOwnerPassword(String listID, String password){
         String SQLPassword = "select ownerPW from wishlist where listID = ?";
-
-        return jdbcTemplate.query(SQLPassword, new SingleColumnRowMapper<>(), listID).getFirst().equals(password);
+        List<String> result = jdbcTemplate.query(SQLPassword, new SingleColumnRowMapper<>(), listID);
+        return !result.isEmpty() && result.getFirst().equals(password);
     }
+
     public boolean checkGuestPassword(String listID, String password){
         String SQLPassword = "select guestPW from wishlist where wishlist.listID = ?";
-
-        return jdbcTemplate.query(SQLPassword, new SingleColumnRowMapper<>(), listID).getFirst().equals(password);
+        List<String> result = jdbcTemplate.query(SQLPassword, new SingleColumnRowMapper<>(), listID);
+        return !result.isEmpty() && result.getFirst().equals(password);
     }
 
     public boolean addWish(Wish wish, String listID) {
+
+        List<Event> events = wish.getEvents();
         String sqlWish = "insert into wish(listID, wish_name, description, product_url, comments, price, isReserved) " +
                 "values(?, ?, ?, ?, ?, ?, false)";
 
-        String sqlEvent = String.format("insert into event_wish(wishID, eventID) " +
-                "select w.wishID, e.eventID " +
-                "from (select wishID from wish " +
-                "where wish_name = '%s') as w " +
-                "cross join (select eventID from event " +
-                "where event_name in (%s)) as e ", wish.getName(), formatEvents(wish.getEvents()));
+        String sqlEvent = """
+                insert into event_wish(wishID, eventID) 
+                select w.wishID, e.eventID 
+                from (select wishID from wish 
+                where wish_name = '%s') as w 
+                cross join (select eventID from event where event_name in (%s)) as e
+                    """.formatted(wish.getName().trim(), formatEvents(events));
 
         jdbcTemplate.update(sqlWish, listID, wish.getName(), wish.getDescription(), wish.getProductURL(),
-                wish.getComments(), wish.getPrice());
+                wish.getComments(), (Double) wish.getPrice());
         jdbcTemplate.update(sqlEvent);
         return true;
     }
@@ -123,16 +128,32 @@ public class WishlistRepository {
 
 
     public void updateWish(Wish wish, String listId, String originalWishName) {
-        String sqlWish =
-                """
+        String sqlWish = """
                 update wish
-                set wish_name = ?, description = ?, product_url = ?, comments = ?, price = ?, isReserved = ?, image = ? where listID = ? and wish_name = ?
+                set wish_name = ?, description = ?, product_url = ?, comments = ?, price = ?, isReserved = ?, image = ? where listID = ? and wish_name = ? 
                """;
-        jdbcTemplate.update(
-                sqlWish,
+        jdbcTemplate.update(sqlWish,
                 wish.getName(), wish.getDescription(), wish.getProductURL(),
                 wish.getComments(), wish.getPrice(), wish.isReserved(),
                 wish.getImage(), listId, originalWishName);
+
+        if (!wish.getEvents().isEmpty()) {
+            String sqlDeleteEvents = "delete from event_wish where wishID in (select wishID from wish where wish_name = ? and listID = ?)";
+            jdbcTemplate.update(sqlDeleteEvents, wish.getName(), listId);
+            List<String> eventTitles = wish.getEvents().stream().map(Event::title).toList();
+            String placeholders = eventTitles.stream().map(e -> "?").collect(Collectors.joining(", "));
+            String sqlInsertEvents = "insert into event_wish(wishID, eventID) " +
+                    "select w.wishID, e.eventID from " +
+                    "(select wishID from wish where wish_name = ? and listID = ?) as w " +
+                    "cross join (select eventID from event where event_name in (" + placeholders + ")) as e";
+            jdbcTemplate.update(sqlInsertEvents, ps -> {
+                ps.setString(1, wish.getName());
+                ps.setString(2, listId);
+                for (int i = 0; i < eventTitles.size(); i++) {
+                    ps.setString(3 + i, eventTitles.get(i));
+                }
+            });
+        }
     }
 
     private String formatEvents(List<Event> events){
