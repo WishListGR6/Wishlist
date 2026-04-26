@@ -39,12 +39,12 @@ public class WishlistRepository {
     public String generateShareLink(String listID) {
         List<String> existing = getAccessTokens(listID);
         if (!existing.isEmpty()) {
-            return "http://localhost:8080/login/" + listID + "?accessToken=" + existing.getFirst();
+            return "http://wishlist-app-group6.azurewebsites.net/login/" + listID + "?accessToken=" + existing.getFirst();
         }
         String accesstoken = generateAccessToken();
         String SQL = "insert into access_token(token, listID) values(?, ?);";
         jdbcTemplate.update(SQL, accesstoken, listID);
-        return "http://localhost:8080/login/" + listID + "?accessToken=" + accesstoken;
+        return "http://wishlist-app-group6.azurewebsites.net/login/" + listID + "?accessToken=" + accesstoken;
     }
 
 

@@ -19,7 +19,9 @@
             <small class="text-muted" th:if="${session.isOwner}">Liste-ID: <span th:text="${session.listID}"></span></small>
         </div>
         <div class="d-flex gap-2" th:if="${session.isOwner}">
-            <a th:href="@{/createWish}" class="btn btn-brand">+ Tilføj ønske</a>
+            <span th:if="${session.isOwner}">
+                <a th:href="@{/createWish}" class="btn btn-brand">+ Tilføj ønske</a>
+            </span>
             <a th:href="@{/wishlist/share}" class="btn btn-outline-secondary">Del liste</a>
         </div>
     </div>
